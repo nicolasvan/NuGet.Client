@@ -1,24 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\build\common.core.props" />
-  <Import Project="..\..\..\build\nuspec.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
 
   <PropertyGroup>
     <Description>NuGet Project Management</Description>
     <TargetFramework>net45</TargetFramework>
     <NoWarn>$(NoWarn);CS1591;CS1574;CS1573</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <PackProject>true</PackProject>
+    <Shipping>true</Shipping>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\Shared\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NuGet.ProjectModel\NuGet.ProjectModel.csproj" />
@@ -35,5 +24,5 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <Import Project="..\..\..\build\common.core.targets" />
+  <Import Project="$(BuildCommonDirectory)common.targets"/>
 </Project>

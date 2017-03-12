@@ -1,23 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\build\common.core.props" />
-  <Import Project="..\..\..\build\nuspec.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
 
   <PropertyGroup>
     <Description>NuGet Protocol for Visual Studio</Description>
     <TargetFramework>net45</TargetFramework>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>nuget protocol</PackageTags>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <PackProject>true</PackProject>
+    <Shipping>true</Shipping>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\Shared\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NuGet.Configuration\NuGet.Configuration.csproj" />
@@ -29,5 +20,5 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
 
-  <Import Project="..\..\..\build\common.core.targets"/>
+  <Import Project="$(BuildCommonDirectory)common.targets"/>
 </Project>

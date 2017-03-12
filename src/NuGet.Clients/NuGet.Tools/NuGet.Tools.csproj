@@ -24,6 +24,10 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <AssemblyName>NuGet.Tools</AssemblyName>
     <VSSDKTargetPlatformRegRootSuffix>Exp</VSSDKTargetPlatformRegRootSuffix>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>D:\src\NuGet.Client\Backup1\</UpgradeBackupLocation>
+    <OldToolsVersion>14.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '14.0'">
     <VsixOutputDirName>VS14</VsixOutputDirName>
@@ -33,11 +37,11 @@
     <IsProductComponent>true</IsProductComponent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '15.0' AND '$(IsInsertable)' == 'true'">
-      <VsixOutputDirName>VS15</VsixOutputDirName>
-      <IsProductComponent>true</IsProductComponent>
-      <ExtensionInstallationRoot>CommonExtensions</ExtensionInstallationRoot>
-      <ExtensionInstallationFolder>Microsoft\NuGet</ExtensionInstallationFolder>
-    </PropertyGroup>
+    <VsixOutputDirName>VS15</VsixOutputDirName>
+    <IsProductComponent>true</IsProductComponent>
+    <ExtensionInstallationRoot>CommonExtensions</ExtensionInstallationRoot>
+    <ExtensionInstallationFolder>Microsoft\NuGet</ExtensionInstallationFolder>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And '$(BuildingInsideVisualStudio)' == 'True'">
     <StartAction>Program</StartAction>
     <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
@@ -341,8 +345,8 @@
     </None>
   </ItemGroup>
   <ItemGroup />
-  <Target Name="AfterBuild" DependsOnTargets="PublishVS14;PublishVS15;PublishVS15Insertable"/>
-  <Target Name="PublishVS14"  Condition="'$(VisualStudioVersion)' == '14.0'">
+  <Target Name="AfterBuild" DependsOnTargets="PublishVS14;PublishVS15;PublishVS15Insertable" />
+  <Target Name="PublishVS14" Condition="'$(VisualStudioVersion)' == '14.0'">
     <PropertyGroup>
       <PublishDestination>$(ArtifactRoot)\$(VsixOutputDirName)</PublishDestination>
     </PropertyGroup>
@@ -360,7 +364,7 @@
       <PublishDestination>$(ArtifactRoot)\$(VsixOutputDirName)</PublishDestination>
     </PropertyGroup>
     <ItemGroup>
-      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json"/>
+      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json" />
     </ItemGroup>
     <Message Text="Publishing VS15 VSIX package files..." Importance="high" />
     <Message Text="$(TargetVsixContainer) -&gt; $(PublishDestination)" Importance="high" />
@@ -378,7 +382,7 @@
       <PublishDestination>$(ArtifactRoot)\$(VsixOutputDirName)</PublishDestination>
     </PropertyGroup>
     <ItemGroup>
-      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json"/>
+      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json" />
     </ItemGroup>
     <Message Text="Publishing VS15 Insertable VSIX package files..." Importance="high" />
     <Message Text="$(TargetVsixContainer) -&gt; $(PublishDestination)\Insertable" Importance="high" />

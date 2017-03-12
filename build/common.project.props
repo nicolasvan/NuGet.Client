@@ -16,15 +16,6 @@
     <GenerateNeutralResourcesLanguageAttribute Condition=" '$(GenerateNeutralResourcesLanguageAttribute)' == '' ">false</GenerateNeutralResourcesLanguageAttribute>
   </PropertyGroup>
 
-  <!-- Compiler flags -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net46' ">
-    <DefineConstants>$(DefineConstants);IS_DESKTOP</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.0' OR '$(TargetFramework)' == 'netstandard1.3' OR '$(TargetFramework)' == 'netstandard1.4' OR '$(TargetFramework)' == 'netstandard1.5' OR '$(TargetFramework)' == 'netstandard1.6' ">
-    <DefineConstants>$(DefineConstants);IS_CORECLR</DefineConstants>
-  </PropertyGroup>
-
   <!-- Default project configuration -->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
