@@ -183,7 +183,7 @@ Function Install-NuGet {
     if ($Force -or -not (Test-Path $NuGetExe)) {
         Trace-Log 'Downloading nuget.exe'
 
-        wget https://dist.nuget.org/win-x86-commandline/latest-prerelease/nuget.exe -OutFile $NuGetExe
+        wget https://dist.nuget.org/win-x86-commandline/v4.0.0/nuget.exe -OutFile $NuGetExe
     }
 
     # Display nuget info
@@ -202,7 +202,7 @@ Function Install-DotnetCLI {
             Root = $CLIRoot
             DotNetExe = Join-Path $CLIRoot 'dotnet.exe'
             DotNetInstallUrl = 'https://raw.githubusercontent.com/dotnet/cli/58b0566d9ac399f5fa973315c6827a040b7aae1f/scripts/obtain/dotnet-install.ps1'
-            Version = '1.0.0'
+            Version = '1.0.1'
         }
     }
     else {
