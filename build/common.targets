@@ -62,11 +62,6 @@
     <Message Text="Packed project $(MSBuildProjectName)" Importance="high"  />
   </Target>
 
-  <!-- Additional imports for netcore projects -->
-  <ImportGroup Condition=" '$(IsNetCoreProject)' == 'true' ">
-    <Import Project="common.core.targets" />
-  </ImportGroup>
-
   <!-- Projects that ship -->
   <ImportGroup Condition=" '$(Shipping)' == 'true' ">
     <Import Project="sign.targets" />
@@ -78,4 +73,9 @@
   <Target Name="GetCopyToOutputDirectoryItems" Condition=" '$(IsNetCoreProject)' == 'true' " />
   <Target Name="SatelliteDllsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
   <Target Name="DebugSymbolsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
+
+  <!-- Test Projects -->
+  <ImportGroup Condition=" '$(TestProject)' == 'true' ">
+    <Import Project="test.targets" />
+  </ImportGroup>
 </Project>

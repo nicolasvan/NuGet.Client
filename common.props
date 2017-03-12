@@ -10,6 +10,7 @@
     <ArtifactsDirectory>$(MSBuildThisFileDirectory)artifacts\</ArtifactsDirectory>
     <DotnetExePath>$(MSBuildThisFileDirectory)cli\dotnet.exe</DotnetExePath>
     <SharedDirectory>$(MSBuildThisFileDirectory)Shared</SharedDirectory>
+    <NuGetCoreSrcDirectory>$(MSBuildThisFileDirectory)src\NuGet.Core\</NuGetCoreSrcDirectory>
   </PropertyGroup>
 
   <!-- Additional props -->

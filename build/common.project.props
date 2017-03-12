@@ -2,6 +2,8 @@
   <!-- Helper properties -->
   <PropertyGroup>
     <IsNetCoreProject Condition=" '$(TargetFramework)' != '' OR '$(TargetFrameworks)' != '' ">true</IsNetCoreProject>
+    <IsXPlat>false</IsXPlat>
+    <IsXPlat Condition=" $(MSBuildProjectFullPath.StartsWith('/')) == 'true' OR $(MSBuildProjectFullPath.StartsWith('\')) == 'true' ">true</IsXPlat>
   </PropertyGroup>
 
   <!-- Defaults -->
@@ -128,11 +130,6 @@
   <PropertyGroup Condition=" '$(Version)' == '' ">
     <Version>$(SemanticVersion)$(PreReleaseInformationVersion)</Version>
   </PropertyGroup>
-
-  <!-- Test Projects -->
-  <ImportGroup Condition=" '$(TestProject)' == 'true' ">
-    <Import Project="test.props" />
-  </ImportGroup>
 
   <PropertyGroup Condition=" '$(IsNetCoreProject)' == 'true' ">
     <SchemaVersion>2.0</SchemaVersion>
