@@ -8,8 +8,8 @@ using Xunit;
 
 namespace NuGet.Test.Utility
 {
-    public class PlatformFactAttribute
-        : FactAttribute
+    public class PlatformTheoryAttribute
+        : TheoryAttribute
     {
         private string _skip;
 
@@ -54,14 +54,14 @@ namespace NuGet.Test.Utility
         /// <summary>
         /// Provide property values to use this attribute.
         /// </summary>
-        public PlatformFactAttribute()
+        public PlatformTheoryAttribute()
         {
         }
 
         /// <summary>
         /// Run only on the given platforms
         /// </summary>
-        public PlatformFactAttribute(params string[] platforms)
+        public PlatformTheoryAttribute(params string[] platforms)
         {
             Platforms = platforms.ToList();
         }

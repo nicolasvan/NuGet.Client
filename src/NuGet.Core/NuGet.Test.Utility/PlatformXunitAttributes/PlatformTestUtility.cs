@@ -1,33 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NuGet.Common;
 
 namespace NuGet.Test.Utility
 {
     public static class PlatformTestUtility
     {
-
         /// <summary>
         /// Returns a message to apply to the xunit attribute if it should be skipped.
         /// Null is returned if the test should run.
         /// </summary>
         public static string GetSkipMessageOrNull(params string[] platforms)
         {
-            if (platforms.Length < 0)
-            {
-                throw new ArgumentException("No platforms provided.");
-            }
-
             var current = CurrentPlatform;
 
-            var skip = platforms.Any(s => StringComparer.OrdinalIgnoreCase.Equals(current, s));
+            var runTest = platforms.Any(s => StringComparer.OrdinalIgnoreCase.Equals(current, s));
 
-            if (skip)
+            if (!runTest)
             {
-                return $"Test does not apply to: {current}. Target platforms: {String.Join(", ", platforms)}";
+                var plural = platforms.Length == 1 ? "" : "s";
+
+                return $"Test does not apply to: {current}. Target platform{plural}: {String.Join(", ", platforms)}";
             }
 
             return null;
@@ -44,6 +37,20 @@ namespace NuGet.Test.Utility
             }
         }
 
+        public static string GetMonoMessage(bool onlyOnMono, bool skipMono)
+        {
+            if (onlyOnMono && !RuntimeEnvironmentHelper.IsMono)
+            {
+                return "This test only runs on mono.";
+            }
+
+            if (skipMono && RuntimeEnvironmentHelper.IsMono)
+            {
+                return "This test does not run on mono.";
+            }
+
+            return null;
+        }
 
         private static readonly Lazy<string> _currentPlatform = new Lazy<string>(GetCurrentPlatform);
 
