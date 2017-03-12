@@ -1,12 +1,81 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-<!--
-  <Target Name="MakeNuGetReferencesPrivate"
-    AfterTargets="ResolveNuGetPackageAssets"
-    Condition="Exists('$(MSBuildBinPath)\..\Imports\Microsoft.Common.Props\ImportBefore\Microsoft.NuGet.ImportBefore.props')">
-    <ItemGroup>
-    <Reference Include="@(_ReferencesFromNuGetPackages)">
-      <Private>True</Private>
-    </Reference>
-    </ItemGroup>
-  </Target> -->
+﻿<Project ToolsVersion="15.0">
+
+  <!-- Include shared files for netcore projects -->
+  <ItemGroup Condition=" '$(IsNetCoreProject)' == 'true' AND '$(SkipShared)' != 'true' ">
+    <Compile Include="$(SharedDirectory)\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
+  </ItemGroup>
+
+  <!-- Assembly attributes -->
+  <ItemGroup Condition=" '$(SkipAssemblyAttributes)' == 'true' ">
+    <!--
+      AssemblyVersion and AssemblyFileVersion attributes are generated automatically for every build.
+      NuGet package version is derived from AssemblyFileVersion.
+    -->
+    <AssemblyAttributes Include="AssemblyVersion">
+      <_Parameter1>$(SemanticVersion).$(PreReleaseVersion)</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <_Parameter1>$(SemanticVersion).$(PreReleaseVersion)</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyInformationalVersion">
+      <_Parameter1>$(SemanticVersion)$(PreReleaseInformationVersion)</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyCompany">
+      <_Parameter1>Microsoft Corporation</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyProduct">
+      <_Parameter1>NuGet</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyCopyright">
+      <_Parameter1>Microsoft Corporation. All rights reserved.</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="System.Resources.NeutralResourcesLanguage">
+      <_Parameter1>en-US</_Parameter1>
+    </AssemblyAttributes>
+  </ItemGroup>
+
+  <!-- Create nupkg hook -->
+  <PropertyGroup Condition=" '$(PackProject)' == 'true' ">
+    <IsPackable>true</IsPackable>
+    <IncludeSymbols Condition=" '$(IncludeSymbols)' == '' ">true</IncludeSymbols>
+    <PackageOutputPath>$(ArtifactsDirectory)nupkgs</PackageOutputPath>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+  </PropertyGroup>
+
+  <!--
+    ============================================================
+    TestProject
+    Runs tests on the current project if it is a test project.
+    ============================================================
+  -->
+  <Target Name="TestProject" Condition=" '$(TestProject)' == 'true' " DependsOnTargets="VSTest">
+    <Message Text="Tested project $(MSBuildProjectName)" Importance="high"  />
+  </Target>
+
+  <!--
+    ============================================================
+    PackProject
+    Packs the current project if it is marked as a pack project.
+    ============================================================
+  -->
+  <Target Name="PackProject" Condition=" '$(PackProject)' == 'true' " DependsOnTargets="Pack">
+    <Message Text="Packed project $(MSBuildProjectName)" Importance="high"  />
+  </Target>
+
+  <!-- Additional imports for netcore projects -->
+  <ImportGroup Condition=" '$(IsNetCoreProject)' == 'true' ">
+    <Import Project="common.core.targets" />
+  </ImportGroup>
+
+  <!-- Projects that ship -->
+  <ImportGroup Condition=" '$(Shipping)' == 'true' ">
+    <Import Project="sign.targets" />
+  </ImportGroup>
+
+  <!-- These are needed becuase currently a VSIX project cannot reference a net core project that multi targets -->
+  <Target Name="BuiltProjectOutputGroupDependencies" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="BuiltProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="GetCopyToOutputDirectoryItems" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="SatelliteDllsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="DebugSymbolsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
 </Project>

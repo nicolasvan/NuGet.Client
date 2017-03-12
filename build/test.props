@@ -1,27 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Shared test project template -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <DefineConstants>$(DefineConstants);IS_DESKTOP</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' OR '$(TargetFramework)' == 'netstandard1.3' ">
-    <DefineConstants>$(DefineConstants);IS_CORECLR</DefineConstants>
-  </PropertyGroup>
+
   <PropertyGroup>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <WarningsAsErrors>False</WarningsAsErrors>
-    <NoWarn>CS1701</NoWarn>
+    <NoWarn>$(NoWarn);CS1701</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="Moq" Version="4.7.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSDKVersion)" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="Moq" Version="$(MoqVersion)" />
   </ItemGroup>
   
 </Project>

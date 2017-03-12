@@ -1,23 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\build\common.core.props" />
-  <Import Project="..\..\..\build\nuspec.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
     <Description>NuGet's implementation of Semantic Versioning.</Description>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>semver;semantic versioning</PackageTags>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">1.6.0</NetStandardImplicitPackageVersion>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">$(NetStandardPackageVersion)</NetStandardImplicitPackageVersion>
+    <PackProject>true</PackProject>
+    <Shipping>true</Shipping>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\..\..\Shared\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
-  </ItemGroup>
-
-  <Import Project="..\..\..\build\common.core.targets"/>
+  <Import Project="$(BuildCommonDirectory)common.targets"/>
 </Project>
