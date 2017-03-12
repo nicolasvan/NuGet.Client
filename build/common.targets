@@ -5,6 +5,18 @@
     <Compile Include="$(SharedDirectory)\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
   </ItemGroup>
 
+  <!-- Set the output location for all non-test projects -->
+  <!-- Test projects currently fail when the output dir is moved -->
+  <PropertyGroup Condition=" '$(TestProject)' != 'true' ">
+    <OutDirFx>$(VisualStudioVersion)\$(Configuration)\</OutDirFx>
+    <OutputPath>$(ArtifactRoot)\$(MSBuildProjectName)\$(OutDirFx)</OutputPath>
+    <OutputPath>$([System.IO.Path]::GetFullPath( $(OutputPath) ))\</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+    <IntermediateOutputPath>$(ArtifactRoot)\$(MSBuildProjectName)\.obj\$(OutDirFx)</IntermediateOutputPath>
+    <IntermediateOutputPath>$([System.IO.Path]::GetFullPath( $(IntermediateOutputPath) ))\</IntermediateOutputPath>
+    <AppxPackageDir>$(OutputPath)</AppxPackageDir>
+  </PropertyGroup>
+
   <!-- Assembly attributes -->
   <ItemGroup Condition=" '$(SkipAssemblyAttributes)' == 'true' ">
     <!--
@@ -42,6 +54,23 @@
     <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
+  <!-- Projects that ship -->
+  <ImportGroup Condition=" '$(Shipping)' == 'true' ">
+    <Import Project="sign.targets" />
+  </ImportGroup>
+
+  <!-- These are needed because currently a VSIX project cannot reference a net core project that multi targets -->
+  <Target Name="BuiltProjectOutputGroupDependencies" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="BuiltProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="GetCopyToOutputDirectoryItems" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="SatelliteDllsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
+  <Target Name="DebugSymbolsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
+
+  <!-- Test Projects -->
+  <ImportGroup Condition=" '$(TestProject)' == 'true' ">
+    <Import Project="test.targets" />
+  </ImportGroup>
+
   <!--
     ============================================================
     TestProject
@@ -61,21 +90,4 @@
   <Target Name="PackProject" Condition=" '$(PackProject)' == 'true' " DependsOnTargets="Pack">
     <Message Text="Packed project $(MSBuildProjectName)" Importance="high"  />
   </Target>
-
-  <!-- Projects that ship -->
-  <ImportGroup Condition=" '$(Shipping)' == 'true' ">
-    <Import Project="sign.targets" />
-  </ImportGroup>
-
-  <!-- These are needed becuase currently a VSIX project cannot reference a net core project that multi targets -->
-  <Target Name="BuiltProjectOutputGroupDependencies" Condition=" '$(IsNetCoreProject)' == 'true' " />
-  <Target Name="BuiltProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
-  <Target Name="GetCopyToOutputDirectoryItems" Condition=" '$(IsNetCoreProject)' == 'true' " />
-  <Target Name="SatelliteDllsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
-  <Target Name="DebugSymbolsProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />
-
-  <!-- Test Projects -->
-  <ImportGroup Condition=" '$(TestProject)' == 'true' ">
-    <Import Project="test.targets" />
-  </ImportGroup>
 </Project>

@@ -34,22 +34,12 @@
     <NuGetTargets>$(MSBuildExtensionsPath)\Microsoft\NuGet\15.0\Microsoft.NuGet.targets</NuGetTargets>
   </PropertyGroup>
 
-  <!--Build output setting-->
+  <!--Build output setting -->
   <PropertyGroup>
     <EnlistmentRoot>$(RepositoryRootDirectory)</EnlistmentRoot>
     <EnlistmentRootSrc>$(RepositoryRootDirectory)\src</EnlistmentRootSrc>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(RepositoryRootDirectory)\</SolutionDir>
     <ArtifactRoot>$([System.IO.Path]::GetFullPath( $(ArtifactsDirectory) ))</ArtifactRoot>
-
-    <OutDirFx>$(VisualStudioVersion)\$(Configuration)\</OutDirFx>
-    <OutputPath>$(ArtifactRoot)\$(MSBuildProjectName)\$(OutDirFx)</OutputPath>
-    <OutputPath>$([System.IO.Path]::GetFullPath( $(OutputPath) ))\</OutputPath>
-    <OutDir>$(OutputPath)</OutDir>
-
-    <IntermediateOutputPath>$(ArtifactRoot)\$(MSBuildProjectName)\.obj\$(OutDirFx)</IntermediateOutputPath>
-    <IntermediateOutputPath>$([System.IO.Path]::GetFullPath( $(IntermediateOutputPath) ))\</IntermediateOutputPath>
-
-    <AppxPackageDir>$(OutputPath)</AppxPackageDir>
   </PropertyGroup>
 
   <!-- Common project build settings -->
@@ -79,14 +69,14 @@
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '14.0'">
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <DefineConstants>$(DefineConstants);VS14</DefineConstants>
-    <VSSDKRoot>$(EnlistmentRoot)\packages\Microsoft.VSSDK.BuildTools.14.3.25420</VSSDKRoot>
+    <VSSDKRoot>$(RepositoryRootDirectory)\packages\Microsoft.VSSDK.BuildTools.14.3.25420</VSSDKRoot>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VSSDKRoot)\tools</VSToolsPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '15.0'">
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <DefineConstants>$(DefineConstants);VS15</DefineConstants>
-    <VSSDKRoot>$(EnlistmentRoot)\packages\Microsoft.VSSDK.BuildTools.15.0.26201</VSSDKRoot>
+    <VSSDKRoot>$(RepositoryRootDirectory)\packages\Microsoft.VSSDK.BuildTools.15.0.26201</VSSDKRoot>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VSSDKRoot)\tools</VSToolsPath>
   </PropertyGroup>
 
