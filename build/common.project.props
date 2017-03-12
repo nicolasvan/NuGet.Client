@@ -71,6 +71,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VSSDKRoot)\tools</VSToolsPath>
   </PropertyGroup>
 
+  <!-- This is not curently needed.
   <PropertyGroup Condition=" '$(BuildNumber)' == '' ">
     <SemanticVersionDate>2017-02-27</SemanticVersionDate>
     <Ticks1>$([System.DateTime]::Parse($(SemanticVersionDate)).Ticks)</Ticks1>
@@ -78,7 +79,7 @@
     <SpanTicks>$([MSBuild]::Subtract($(Ticks2), $(Ticks1)))</SpanTicks>
     <SpanMinutes>$([System.TimeSpan]::FromTicks($(SpanTicks)).TotalMinutes)</SpanMinutes>
     <BuildNumber>$([System.String]::Format('{0:F0}', $([MSBuild]::Divide($([System.Convert]::ToDouble($(SpanMinutes))), 5))))</BuildNumber>
-  </PropertyGroup>
+  </PropertyGroup> -->
 
   <!--Setting the Pre-release/Build meta-data from CI if Version is set-->
   <PropertyGroup Condition="'$(BuildNumber)' != ''">
