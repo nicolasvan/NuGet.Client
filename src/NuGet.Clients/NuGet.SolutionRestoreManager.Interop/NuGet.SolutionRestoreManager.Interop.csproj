@@ -42,7 +42,7 @@
 
   <Import Project="$(BuildCommonDirectory)common.targets" />
 
-  <Target Name="CustomPack" AfterTargets="Build" Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' ">
+  <Target Name="CustomPack" AfterTargets="Build;Rebuild" Condition=" '$(EnablePackTarget)' == 'true' AND '$(CustomPack)' == 'true' ">
     <ItemGroup>
       <Nuspec Include="*.nuspec" />
       <PackageInclude Include="install.ps1" />

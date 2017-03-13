@@ -6,6 +6,7 @@
     <TargetFramework>net45</TargetFramework>
     <PackProject>true</PackProject>
     <Shipping>true</Shipping>
+    <PackageId>NuGet.CommandLine</PackageId>
   </PropertyGroup>
 
   <PropertyGroup>
