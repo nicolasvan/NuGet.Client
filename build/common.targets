@@ -1,5 +1,10 @@
 ﻿<Project ToolsVersion="15.0">
 
+  <!-- Helper properties -->
+  <PropertyGroup>
+    <IsNetCoreProject Condition=" '$(TargetFramework)' != '' OR '$(TargetFrameworks)' != '' ">true</IsNetCoreProject>
+  </PropertyGroup>
+  
   <!-- Compiler flags -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net46' ">
     <DefineConstants>$(DefineConstants);IS_DESKTOP</DefineConstants>
@@ -24,6 +29,13 @@
     <IntermediateOutputPath>$(ArtifactRoot)\$(MSBuildProjectName)\.obj\$(OutDirFx)</IntermediateOutputPath>
     <IntermediateOutputPath>$([System.IO.Path]::GetFullPath( $(IntermediateOutputPath) ))\</IntermediateOutputPath>
     <AppxPackageDir>$(OutputPath)</AppxPackageDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TestProject)' != 'true' AND '$(IsNetCoreProject)' == 'true' ">
+    <BaseIntermediateOutputPath>$(ArtifactsDirectory)$(MSBuildProjectName)\$(VisualStudioVersion)\obj\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\</IntermediateOutputPath>
+    <BaseOutputPath>$(ArtifactsDirectory)$(MSBuildProjectName)\$(VisualStudioVersion)\bin\</BaseOutputPath>
+    <OutputPath>$(BaseOutputPath)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <!-- Assembly attributes -->
@@ -79,6 +91,12 @@
   <ImportGroup Condition=" '$(TestProject)' == 'true' ">
     <Import Project="test.targets" />
   </ImportGroup>
+
+  <PropertyGroup Condition=" '$(IsNetCoreProject)' == 'true' ">
+    <SchemaVersion>2.0</SchemaVersion>
+    <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+    <ProduceOutputsOnBuild>True</ProduceOutputsOnBuild>
+  </PropertyGroup>
 
   <!--
     ============================================================
