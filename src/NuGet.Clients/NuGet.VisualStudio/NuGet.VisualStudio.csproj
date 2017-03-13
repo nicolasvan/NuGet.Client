@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
+
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
+    <Shipping>true</Shipping>
   </PropertyGroup>
+
   <PropertyGroup>
-    <RootNamespace>NuGet.VisualStudio</RootNamespace>
-    <GenerateAssemblyInfo Condition="'$(GenerateAssemblyInfo)' == ''">false</GenerateAssemblyInfo>
-    <AssemblyTitle>NuGet.VisualStudio</AssemblyTitle>
     <AssemblyDescription>APIs for invoking NuGet services in Visual Studio.</AssemblyDescription>
     <ImportedFromTypeLib>NuGet.VisualStudio</ImportedFromTypeLib>
     <Guid>228F7591-2777-47D7-B81D-FEADFC71CEB5</Guid>
@@ -46,7 +47,6 @@
     <PackageReference Version="4.0.0-*" Include="NuGet.Protocol.VisualStudio" />
     <PackageReference Include="VSSDK.TemplateWizardInterface" Version="12.0.4" />
   </ItemGroup>
-  <Import Project="..\..\..\Build\Common.props" Condition="Exists('..\..\..\Build\Common.props')" />
-  <Import Project="$(EnlistmentRoot)\build\common.targets" />
-  <Import Project="$(EnlistmentRoot)\build\sign.targets" />
+
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>

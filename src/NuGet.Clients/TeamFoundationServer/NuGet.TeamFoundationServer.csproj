@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
+
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
+    <Shipping>true</Shipping>
   </PropertyGroup>
+
   <PropertyGroup>
     <RootNamespace>NuGet.TeamFoundationServer</RootNamespace>
-    <GenerateAssemblyInfo Condition="'$(GenerateAssemblyInfo)' == ''">false</GenerateAssemblyInfo>
-    <AssemblyTitle>TeamFoundationServer14</AssemblyTitle>
-    <AssemblyDescription />
     <Guid>e961d080-f10b-4f11-bea0-056509c086cc</Guid>
     <ComVisible>false</ComVisible>
   </PropertyGroup>
@@ -38,7 +39,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\..\..\Build\Common.props" Condition="Exists('..\..\..\Build\Common.props')" />
-  <Import Project="$(EnlistmentRoot)\build\common.targets" />
-  <Import Project="$(EnlistmentRoot)\build\sign.targets" />
+
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>

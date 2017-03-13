@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
+
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
+    <Shipping>true</Shipping>
   </PropertyGroup>
+
   <PropertyGroup>
-    <RootNamespace>NuGet.VisualStudio.Implementation</RootNamespace>
-    <GenerateAssemblyInfo Condition="'$(GenerateAssemblyInfo)' == ''">false</GenerateAssemblyInfo>
-    <AssemblyTitle>NuGet.VisualStudio.Implementation</AssemblyTitle>
-    <AssemblyDescription>Implementation for NuGet.VisualStudio</AssemblyDescription>
+    <Description>Implementation for NuGet.VisualStudio</Description>
     <Guid>9623cf30-192c-4864-b419-29649169ae30</Guid>
     <ImportedFromTypeLib>NuGet.VisualStudio.Implementation</ImportedFromTypeLib>
-    <ComVisible>false</ComVisible>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -63,10 +63,6 @@
     <PackageReference Version="7.10.6070" Include="Microsoft.VisualStudio.OLE.Interop" />
     <PackageReference Include="VSSDK.TemplateWizardInterface" Version="12.0.4" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="..\..\..\Build\Common.props" />
-  <Import Project="$(EnlistmentRoot)\build\common.targets" />
-  <Import Project="$(EnlistmentRoot)\build\sign.targets" />
   <ItemGroup>
     <EmbeddedResource Update="CommonResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -78,4 +74,7 @@
       <DependentUpon>CommonResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>

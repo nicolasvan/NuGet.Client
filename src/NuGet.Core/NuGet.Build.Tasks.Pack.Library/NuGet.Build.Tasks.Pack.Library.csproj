@@ -7,9 +7,12 @@
     <AssemblyName>NuGet.Build.Tasks.Pack</AssemblyName>
     <PackageId>NuGet.Build.Tasks.Pack.Library</PackageId>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(NetStandardPackageVersion)</NetStandardImplicitPackageVersion>
+    <Shipping>true</Shipping>
+    <PackProject>true</PackProject>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\NuGet.Build.Tasks\Common\*.cs" />
     <Content Include="Pack.targets">
       <PackagePath>build;buildCrossTargeting</PackagePath>
       <Pack>true</Pack>

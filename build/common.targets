@@ -16,7 +16,7 @@
 
   <!-- Set the output location for all non-test projects -->
   <!-- Test projects currently fail when the output dir is moved -->
-  <PropertyGroup Condition=" '$(TestProject)' != 'true' ">
+  <PropertyGroup Condition=" '$(TestProject)' != 'true' AND '$(IsNetCoreProject)' != 'true' ">
     <OutDirFx>$(VisualStudioVersion)\$(Configuration)\</OutDirFx>
     <OutputPath>$(ArtifactRoot)\$(MSBuildProjectName)\$(OutDirFx)</OutputPath>
     <OutputPath>$([System.IO.Path]::GetFullPath( $(OutputPath) ))\</OutputPath>

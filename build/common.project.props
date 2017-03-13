@@ -23,6 +23,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
     <!-- Always use 15.0 since we cannot build on msbuild 14.0 -->
     <NuGetTargets>$(MSBuildExtensionsPath)\Microsoft\NuGet\15.0\Microsoft.NuGet.targets</NuGetTargets>
+    <ComVisible>false</ComVisible>
   </PropertyGroup>
 
   <!--Build output setting -->

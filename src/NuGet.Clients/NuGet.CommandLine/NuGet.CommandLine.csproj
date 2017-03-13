@@ -1,8 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
+
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
+    <PackProject>true</PackProject>
+    <Shipping>true</Shipping>
   </PropertyGroup>
+
   <PropertyGroup>
     <RootNamespace>NuGet.CommandLine</RootNamespace>
     <GenerateAssemblyInfo Condition="'$(GenerateAssemblyInfo)' == ''">false</GenerateAssemblyInfo>
@@ -12,6 +17,7 @@
     <OutputType>Exe</OutputType>
     <ComVisible>false</ComVisible>
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.Setup.Configuration.Interop">
       <HintPath>$(EnlistmentRoot)\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.1.1.142-preview4-29265\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
@@ -77,4 +83,6 @@
       <DependentUpon>NuGetResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>
