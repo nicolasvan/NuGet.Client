@@ -40,7 +40,9 @@
     <Reference Include="System" />
   </ItemGroup>
 
-  <Target Name="CustomPack">
+  <Import Project="$(BuildCommonDirectory)common.targets" />
+
+  <Target Name="CustomPack" AfterTargets="Build" Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' ">
     <ItemGroup>
       <Nuspec Include="*.nuspec" />
       <PackageInclude Include="install.ps1" />
@@ -48,8 +50,6 @@
     <Copy SourceFiles="%(PackageInclude.Identity)" DestinationFolder="$(TargetDir)" />
     <Exec Command="$(NuGetExePath) pack %(Nuspec.Identity) -Version $(Version) -BasePath $(TargetDir) -OutputDirectory $(NupkgOutputDirectory) -Verbosity detailed" />
   </Target>
-
-  <Import Project="$(BuildCommonDirectory)common.targets" />
 
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\NuGet.SolutionRestoreManager.Interop.XML</DocumentationFile>

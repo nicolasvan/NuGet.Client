@@ -391,9 +391,6 @@ Function Restore-SolutionOrProject {
     if ($ToolsetVersion) {
         $restoreArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
     }    
-    if ($CreateNupkgs) {
-        $restoreArgs += "/p:CreateNupkgs=true"
-    }
     
     # Parallel build
     $restoreArgs += "/m"
@@ -451,7 +448,7 @@ Function Build-SolutionOrProject {
 
     $buildArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
 
-    $buildArgs += "/p:CreateNupkgs=true"
+    $buildArgs += "/p:PackProjects=true"
 
     # Parallel build
     $buildArgs += "/m"

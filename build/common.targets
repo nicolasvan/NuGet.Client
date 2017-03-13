@@ -67,14 +67,6 @@
     </AssemblyAttributes>
   </ItemGroup>
 
-  <!-- Create nupkg hook -->
-  <PropertyGroup Condition=" '$(PackProject)' == 'true' ">
-    <IsPackable>true</IsPackable>
-    <IncludeSymbols Condition=" '$(IncludeSymbols)' == '' ">true</IncludeSymbols>
-    <PackageOutputPath>$(ArtifactsDirectory)nupkgs</PackageOutputPath>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-  </PropertyGroup>
-
   <!-- Projects that ship -->
   <ImportGroup Condition=" '$(Shipping)' == 'true' ">
     <Import Project="sign.targets" />
@@ -110,11 +102,16 @@
 
   <!--
     ============================================================
-    PackProject
+    PackProject hook
     Packs the current project if it is marked as a pack project.
     ============================================================
   -->
-  <Target Name="PackProject" Condition=" '$(PackProject)' == 'true' " DependsOnTargets="Pack">
-    <Message Text="Packed project $(MSBuildProjectName)" Importance="high"  />
-  </Target>
+  <!-- Create nupkg hook -->
+  <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' AND '$(CustomPack)' != 'true' ">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IsPackable>true</IsPackable>
+    <IncludeSymbols Condition=" '$(IncludeSymbols)' == '' ">true</IncludeSymbols>
+    <PackageOutputPath>$(NupkgOutputDirectory)</PackageOutputPath>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+  </PropertyGroup>
 </Project>
