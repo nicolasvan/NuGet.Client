@@ -342,6 +342,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+
+  <Import Project="$(BuildCommonDirectory)common.targets" />
+
   <ItemGroup />
   <Target Name="AfterBuild" DependsOnTargets="PublishVS14;PublishVS15;PublishVS15Insertable" />
   <Target Name="PublishVS14" Condition="'$(VisualStudioVersion)' == '14.0'">
@@ -430,7 +433,7 @@
     <Warning Text="Missing @(MissingIgnoredAssemblies-&gt;Count()) ignored file(s) '@(MissingIgnoredAssemblies)'" Condition=" '@(MissingIgnoredAssemblies)' != '' " File="@(VsixIgnoreFile)" />
     <Message Text="Included @(VSIXSourceItem-&gt;Count()) file(s). Filtered @(SuppressPackaging-&gt;Count()) file(s)." Importance="high" />
   </Target>
-  <Import Project="$(BuildCommonDirectory)common.targets" />
+
   <Import Project="$(BuildCommonDirectory)legacy.imports.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,9 +19,6 @@
     <ResolveNuGetPackages>true</ResolveNuGetPackages>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <DocumentationFile>$(OutputPath)\NuGet.SolutionRestoreManager.Interop.XML</DocumentationFile>
-  </PropertyGroup>
   <ItemGroup>
     <None Include="install.ps1" />
     <None Include="NuGet.SolutionRestoreManager.Interop.nuspec" />
@@ -53,6 +50,11 @@
   </Target>
 
   <Import Project="$(BuildCommonDirectory)common.targets" />
+
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\NuGet.SolutionRestoreManager.Interop.XML</DocumentationFile>
+  </PropertyGroup>
+  
   <Import Project="$(BuildCommonDirectory)legacy.imports.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
