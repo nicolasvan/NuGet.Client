@@ -1,13 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
+
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
+    <Shipping>true</Shipping>
+    <Pack>true</Pack>
   </PropertyGroup>
   <PropertyGroup>
     <RootNamespace>NuGet.VisualStudio</RootNamespace>
     <GenerateAssemblyInfo Condition="'$(GenerateAssemblyInfo)' == ''">false</GenerateAssemblyInfo>
     <AssemblyTitle>NuGet.VisualStudio.Interop</AssemblyTitle>
     <AssemblyDescription>NuGet/Visual Studio interop assembly</AssemblyDescription>
+    <Description>$(AssemblyDescription)</Description>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <AssemblyCompany>Microsoft Corporation</AssemblyCompany>
     <AssemblyProduct>NuGet</AssemblyProduct>
@@ -36,5 +41,6 @@
   <ItemGroup>
     <PackageReference Version="7.10.6070" Include="Microsoft.VisualStudio.OLE.Interop" />
   </ItemGroup>
-  <Import Project="..\..\..\build\sign.targets" />
+
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>

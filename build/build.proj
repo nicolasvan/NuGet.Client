@@ -1,5 +1,5 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Run">
-  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'config.props'))\config.props" />
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
 
   <!-- Configuration/global properties -->
   <PropertyGroup>
@@ -9,8 +9,16 @@
 
   <!-- Find all projects in the repository  -->
   <ItemGroup>
-    <RepoProjects Include="$(RepositoryRootDirectory)src\**\*.csproj" />
-    <RepoProjects Include="$(RepositoryRootDirectory)test\**\*.csproj" />
+    <RepoProjects Include="$(RepositoryRootDirectory)src\**\*.csproj" 
+                  Exclude="$(RepositoryRootDirectory)src\NuGet.Core\NuGet.Test.Utility\compiler\resources\project1.csproj;
+                           $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Test.Utility\compiler\resources\project2.csproj" />
+    
+    <RepoProjects Include="$(RepositoryRootDirectory)test\**\*.csproj"
+                  Exclude="$(RepositoryRootDirectory)test\EndToEnd\**;
+                           $(RepositoryRootDirectory)test\TestExtensions\**;
+                           $(RepositoryRootDirectory)test\NuGet.Clients.Tests\**;
+                           $(RepositoryRootDirectory)test\NuGet.Clients.FuncTests\**;
+                           $(RepositoryRootDirectory)test\NuGet.Core.FuncTests\**" />
   </ItemGroup>
 
   <!--
@@ -18,7 +26,7 @@
     Run full build.
     ============================================================
   -->
-  <Target Name="Run" DependsOnTargets="Clean;Build;Test;Pack">
+  <Target Name="Run" DependsOnTargets="Clean;Rebuild;Test">
   </Target>
 
   <!--
@@ -37,11 +45,25 @@
 
   <!--
     ============================================================
+    Rebuild solution.
+    ============================================================
+  -->
+  <Target Name="Rebuild" Condition=" '$(SkipBuild)' != 'true' ">
+    <Message Text="Rebuilding $(SolutionFile)" Importance="high" />
+
+    <MSBuild BuildInParallel="true"
+             Projects="$(SolutionFile)"
+             Targets="rebuild"
+             Properties="$(CommonMSBuildProperties)" />
+  </Target>
+
+  <!--
+    ============================================================
     Restore solution.
     ============================================================
   -->
   <Target Name="Restore" Condition=" '$(SkipRestore)' != 'true' ">
-    <Message Text="Restoring projects" Importance="high" />
+    <Message Text="Restoring $(SolutionFile)" Importance="high" />
 
     <MSBuild BuildInParallel="true"
              Projects="$(SolutionFile)"
@@ -72,7 +94,7 @@
     Test all projects in the solution.
     ============================================================
   -->
-  <Target Name="Test" DependsOnTargets="Build" Condition=" '$(SkipTest)' != 'true' ">
+  <Target Name="Test" DependsOnTargets="" Condition=" '$(SkipTest)' != 'true' ">
     <MSBuild BuildInParallel="false"
              Projects="@(RepoProjects)"
              Targets="TestProject"
