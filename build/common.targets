@@ -1,10 +1,4 @@
 ﻿<Project ToolsVersion="15.0">
-
-  <!-- Helper properties -->
-  <PropertyGroup>
-    <IsNetCoreProject Condition=" '$(TargetFramework)' != '' OR '$(TargetFrameworks)' != '' ">true</IsNetCoreProject>
-  </PropertyGroup>
-  
   <!-- Compiler flags -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net46' ">
     <DefineConstants>$(DefineConstants);IS_DESKTOP</DefineConstants>

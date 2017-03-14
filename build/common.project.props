@@ -6,6 +6,19 @@
     <IsXPlat Condition=" $(MSBuildProjectFullPath.StartsWith('/')) == 'true' OR $(MSBuildProjectFullPath.StartsWith('\')) == 'true' ">true</IsXPlat>
   </PropertyGroup>
 
+  <!-- Common -->
+  <PropertyGroup>
+    <RepositoryRootDirectory>$(MSBuildThisFileDirectory)</RepositoryRootDirectory>
+    <BuildCommonDirectory>$(MSBuildThisFileDirectory)build\</BuildCommonDirectory>
+    <SolutionFile>$(MSBuildThisFileDirectory)$(RepositoryName).sln</SolutionFile>
+    <ArtifactsDirectory>$(MSBuildThisFileDirectory)artifacts\</ArtifactsDirectory>
+    <DotnetExePath>$(MSBuildThisFileDirectory)cli\dotnet.exe</DotnetExePath>
+    <NuGetExePath>$(MSBuildThisFileDirectory).nuget\nuget.exe</NuGetExePath>
+    <SharedDirectory>$(MSBuildThisFileDirectory)Shared</SharedDirectory>
+    <NuGetCoreSrcDirectory>$(MSBuildThisFileDirectory)src\NuGet.Core\</NuGetCoreSrcDirectory>
+    <NupkgOutputDirectory>$(ArtifactsDirectory)nupkgs</NupkgOutputDirectory>
+  </PropertyGroup>
+
   <!-- Defaults -->
   <PropertyGroup>
     <TreatWarningsAsErrors Condition=" '$(TreatWarningsAsErrors)' == '' ">true</TreatWarningsAsErrors>
