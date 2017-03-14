@@ -23,6 +23,13 @@
     <AppxPackageDir>$(OutputPath)</AppxPackageDir>
   </PropertyGroup>
 
+  <!-- Generate AssemblyFileVersion and AssemblyVersion attributes. -->
+  <PropertyGroup>
+    <!-- Turn on dynamic assembly attribute generation -->
+    <AssemblyAttributesPath>$(IntermediateOutputPath)AssemblyInfo.g.cs</AssemblyAttributesPath>
+    <GenerateAdditionalSources>true</GenerateAdditionalSources>
+  </PropertyGroup>
+
   <!-- Assembly attributes -->
   <ItemGroup Condition=" '$(SkipAssemblyAttributes)' == 'true' ">
     <!--
