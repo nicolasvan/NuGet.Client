@@ -906,7 +906,7 @@ Function Publish-ClientsPackages {
     $exeProjectDir = [io.path]::combine($NuGetClientRoot, "src", "NuGet.Clients", "NuGet.CommandLine")
     $exeProject = Join-Path $exeProjectDir "NuGet.CommandLine.csproj"
     $exeNuspec = Join-Path $exeProjectDir "NuGet.CommandLine.nuspec"
-    $exeInputDir = [io.path]::combine($Artifacts, "NuGet.CommandLine", "${ToolsetVersion}.0", $Configuration)
+    $exeInputDir = [io.path]::combine($Artifacts, "NuGet.CommandLine", "${ToolsetVersion}.0", "bin", $Configuration, "net45")
     $exeOutputDir = Join-Path $Artifacts "VS${ToolsetVersion}"
 
     # Build and pack the NuGet.CommandLine project with the build number and release label.
