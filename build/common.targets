@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <!-- Projects that ship -->
-  <ImportGroup Condition=" '$(Shipping)' == 'true' ">
+  <ImportGroup>
     <Import Project="sign.targets" />
   </ImportGroup>
 
