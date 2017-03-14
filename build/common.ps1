@@ -770,13 +770,14 @@ Function Test-ProjectDotnet {
         $opts += 'test', '--configuration', $Configuration
         $opts += '--no-build'
 
-        if ($VerbosePreference) {
-            $opts += '-verbose'
-        }
+        # if ($VerbosePreference) {
+        #    $opts += '-verbose'
+        # }
     
-        if($ToolsetVersion) {
-            $opts += '-ToolsetVersion', $ToolsetVersion
-        }
+        # if($ToolsetVersion) {
+        #    $opts += '-ToolsetVersion', $ToolsetVersion
+        # }
+
         pushd $XProjectLocation
 
         try {
