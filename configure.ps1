@@ -13,7 +13,7 @@ Switch to force installation of required tools.
 Indicates the build script is invoked from CI
 
 .PARAMETER Test
-Indicates the Tests need to be run. Downloads the Test cli.
+Indicates the Tests need to be run. Downloads the Test cli when tests are needed to run.
 
 .EXAMPLE
 .\configure.ps1 -cc -v
