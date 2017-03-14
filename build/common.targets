@@ -13,53 +13,6 @@
     <Compile Include="$(SharedDirectory)\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
   </ItemGroup>
 
-  <!-- Set the output location for all non-test projects -->
-  <!-- Test projects currently fail when the output dir is moved -->
-  <PropertyGroup Condition=" '$(TestProject)' != 'true' ">
-    <BaseIntermediateOutputPath>$(ArtifactsDirectory)$(MSBuildProjectName)\$(VisualStudioVersion)\obj\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
-    <BaseOutputPath>$(ArtifactsDirectory)$(MSBuildProjectName)\$(VisualStudioVersion)\bin\</BaseOutputPath>
-    <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
-    <AppxPackageDir>$(OutputPath)</AppxPackageDir>
-  </PropertyGroup>
-
-  <!-- Generate AssemblyFileVersion and AssemblyVersion attributes. -->
-  <PropertyGroup>
-    <!-- Turn on dynamic assembly attribute generation -->
-    <AssemblyAttributesPath>$(IntermediateOutputPath)AssemblyInfo.g.cs</AssemblyAttributesPath>
-    <GenerateAdditionalSources>true</GenerateAdditionalSources>
-    <PreReleaseVersion>0</PreReleaseVersion>
-  </PropertyGroup>
-
-  <!-- Assembly attributes -->
-  <ItemGroup Condition=" '$(SkipAssemblyAttributes)' != 'true' AND '$(IsNetCoreProject)' != 'true' ">
-    <!--
-      AssemblyVersion and AssemblyFileVersion attributes are generated automatically for every build.
-      NuGet package version is derived from AssemblyFileVersion.
-    -->
-    <AssemblyAttributes Include="AssemblyVersion">
-      <_Parameter1>$(SemanticVersion).$(PreReleaseVersion)</_Parameter1>
-    </AssemblyAttributes>
-    <AssemblyAttributes Include="AssemblyFileVersion">
-      <_Parameter1>$(SemanticVersion).$(PreReleaseVersion)</_Parameter1>
-    </AssemblyAttributes>
-    <AssemblyAttributes Include="AssemblyInformationalVersion">
-      <_Parameter1>$(SemanticVersion)$(PreReleaseInformationVersion)</_Parameter1>
-    </AssemblyAttributes>
-    <AssemblyAttributes Include="AssemblyCompany">
-      <_Parameter1>Microsoft Corporation</_Parameter1>
-    </AssemblyAttributes>
-    <AssemblyAttributes Include="AssemblyProduct">
-      <_Parameter1>NuGet</_Parameter1>
-    </AssemblyAttributes>
-    <AssemblyAttributes Include="AssemblyCopyright">
-      <_Parameter1>Microsoft Corporation. All rights reserved.</_Parameter1>
-    </AssemblyAttributes>
-    <AssemblyAttributes Include="System.Resources.NeutralResourcesLanguage">
-      <_Parameter1>en-US</_Parameter1>
-    </AssemblyAttributes>
-  </ItemGroup>
-
   <!-- Projects that ship -->
   <ImportGroup Condition=" '$(Shipping)' == 'true' ">
     <Import Project="sign.targets" />
@@ -76,12 +29,6 @@
   <ImportGroup Condition=" '$(TestProject)' == 'true' ">
     <Import Project="test.targets" />
   </ImportGroup>
-
-  <PropertyGroup Condition=" '$(IsNetCoreProject)' == 'true' ">
-    <SchemaVersion>2.0</SchemaVersion>
-    <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
-    <ProduceOutputsOnBuild>True</ProduceOutputsOnBuild>
-  </PropertyGroup>
 
   <!--
     ============================================================
