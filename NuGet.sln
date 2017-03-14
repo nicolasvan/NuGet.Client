@@ -196,8 +196,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.PackageManagement.Vis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.SolutionRestoreManager.Test", "test\NuGet.Clients.Tests\NuGet.SolutionRestoreManager.Test\NuGet.SolutionRestoreManager.Test.csproj", "{F7837EEB-1B49-482F-8722-EB35BA0937CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Tools.Test", "test\NuGet.Clients.Tests\NuGet.Tools.Test\NuGet.Tools.Test.csproj", "{5E2D927E-87E3-431A-A062-16DF6EC98BFB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.VisualStudio.Implementation.Test", "test\NuGet.Clients.Tests\NuGet.VisualStudio.Implementation.Test\NuGet.VisualStudio.Implementation.Test.csproj", "{30D3D653-C936-40DD-B044-329980E156ED}"
 EndProject
 Global
