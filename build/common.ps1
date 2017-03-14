@@ -391,9 +391,6 @@ Function Restore-SolutionOrProject {
     if ($ToolsetVersion) {
         $restoreArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
     }    
-    
-    # Parallel build
-    $restoreArgs += "/m"
 
     if (-not $VerbosePreference) {
         $restoreArgs += '/v:q'
@@ -451,7 +448,7 @@ Function Build-SolutionOrProject {
     $buildArgs += "/p:PackProjects=true"
 
     # Parallel build
-    $buildArgs += "/m"
+    # $buildArgs += "/m"
 
     if (-not $VerbosePreference) {
         $buildArgs += '/v:m'
