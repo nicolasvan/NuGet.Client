@@ -760,33 +760,40 @@ Function Test-ProjectDotnet {
         [string]$Configuration = $DefaultConfiguration,
         [string]$ToolsetVersion
     )
+
+    if ($XProjectLocation.EndsWith("Test", "CurrentCultureIgnoreCase") -or $XProjectLocation.EndsWith("Tests", "CurrentCultureIgnoreCase"))
+    {
+        Write-Host "Testing $XProjectLocation"
     
-    Write-Host "Testing $XProjectLocation"
+        $opts = @()
+
+        $opts += 'test', '--configuration', $Configuration
+        $opts += '--no-build'
+
+        if ($VerbosePreference) {
+            $opts += '-verbose'
+        }
     
-    $opts = @()
+        if($ToolsetVersion) {
+            $opts += '-ToolsetVersion', $ToolsetVersion
+        }
+        pushd $XProjectLocation
 
-    $opts += 'test', '--configuration', $Configuration
-    $opts += '--', 'notrait', 'Platform=Linux', '--', 'notrait', 'Platform=Darwin'
+        try {
+            Trace-Log "$DotNetExe $opts"
+            & $DotNetExe $opts
+        }
+        finally {
+            popd
+        }
 
-    if ($VerbosePreference) {
-        $opts += '-verbose'
+        if ($LASTEXITCODE -ne 0) {
+            Error-Log "Tests failed @""$XProjectLocation"" on CoreCLR. Code: $LASTEXITCODE"
+        }
     }
-    
-    if($ToolsetVersion) {
-        $opts += '-ToolsetVersion', $ToolsetVersion
-    }
-    pushd $XProjectLocation
-
-    try {
-        Trace-Log "$DotNetExe $opts"
-        & $DotNetExe $opts
-    }
-    finally {
-        popd
-    }
-
-    if ($LASTEXITCODE -ne 0) {
-        Error-Log "Tests failed @""$XProjectLocation"" on CoreCLR. Code: $LASTEXITCODE"
+    else
+    {
+        Write-Host "Skipping non-test project $XProjectLocation"
     }
 }
 
@@ -906,7 +913,7 @@ Function Publish-ClientsPackages {
     $exeProjectDir = [io.path]::combine($NuGetClientRoot, "src", "NuGet.Clients", "NuGet.CommandLine")
     $exeProject = Join-Path $exeProjectDir "NuGet.CommandLine.csproj"
     $exeNuspec = Join-Path $exeProjectDir "NuGet.CommandLine.nuspec"
-    $exeInputDir = [io.path]::combine($Artifacts, "NuGet.CommandLine", "${ToolsetVersion}.0", $Configuration)
+    $exeInputDir = [io.path]::combine($Artifacts, "NuGet.CommandLine", "${ToolsetVersion}.0", "bin", $Configuration, "net45")
     $exeOutputDir = Join-Path $Artifacts "VS${ToolsetVersion}"
 
     # Build and pack the NuGet.CommandLine project with the build number and release label.

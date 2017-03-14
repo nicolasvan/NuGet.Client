@@ -107,11 +107,23 @@
     ============================================================
   -->
   <!-- Create nupkg hook -->
-  <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' AND '$(CustomPack)' != 'true' ">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' AND '$(VisualStudioVersion)' == '15.0' ">
+    <IsInnerBuildForPack Condition=" '$(TargetFrameworks)' != '' AND '$(TargetFramework)' != '' ">true</IsInnerBuildForPack>
+    <EnablePackTarget Condition=" '$(IsInnerBuildForPack)' != 'true' ">true</EnablePackTarget>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(EnablePackTarget)' == 'true' AND '$(CustomPack)' != 'true' ">
     <IsPackable>true</IsPackable>
     <IncludeSymbols Condition=" '$(IncludeSymbols)' == '' ">true</IncludeSymbols>
     <PackageOutputPath>$(NupkgOutputDirectory)</PackageOutputPath>
     <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
+
+  <Target Name="PackProject"
+          AfterTargets="Build;Rebuild"
+          DependsOnTargets="Pack"
+          Condition=" '$(EnablePackTarget)' == 'true' AND '$(CustomPack)' != 'true' ">
+
+    <Message Text="Created nupkg for $(ProjectName)" Importance="high" />
+  </Target>
 </Project>

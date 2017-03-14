@@ -113,20 +113,7 @@ Invoke-BuildStep 'Set delay signing options' {
         Set-DelaySigning $MSPFXPath $NuGetPFXPath
     } `
     -ev +BuildErrors
-
-    
-# Building the VS14 Tooling solution
-Invoke-BuildStep 'Building NuGet.sln - VS14 Toolset' {
-        Build-Solution `
-            -Configuration $Configuration `
-            -ReleaseLabel $ReleaseLabel `
-            -BuildNumber $BuildNumber `
-            -ToolsetVersion 14 `
-    } `
-    -skip:$SkipVS14 `
-    -ev +BuildErrors
-    
-    
+  
 # Building the VS15 Tooling solution
 Invoke-BuildStep 'Building NuGet.sln - VS15 Toolset' {
         Build-Solution `
@@ -149,6 +136,23 @@ Invoke-BuildStep 'Building NuGet.Tools.vsix for VS Insertion - VS15 Toolset' {
         -ToolsetVersion 15 `
     } `
     -skip:($SkipVS15 -or -not $CI) `
+    -ev +BuildErrors
+
+Invoke-BuildStep 'Publishing NuGet.Clients packages - VS15 Toolset' {
+        Publish-ClientsPackages $Configuration $ReleaseLabel $BuildNumber -ToolsetVersion 15 -KeyFile $MSPFXPath -CI:$CI
+    } `
+    -skip:($Fast -or $SkipVS15) `
+    -ev +BuildErrors
+
+# Building the VS14 Tooling solution
+Invoke-BuildStep 'Building NuGet.sln - VS14 Toolset' {
+        Build-Solution `
+            -Configuration $Configuration `
+            -ReleaseLabel $ReleaseLabel `
+            -BuildNumber $BuildNumber `
+            -ToolsetVersion 14 `
+    } `
+    -skip:$SkipVS14 `
     -ev +BuildErrors
 
 ## Calculating Build time
