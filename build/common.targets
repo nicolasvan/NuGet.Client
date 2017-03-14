@@ -28,10 +28,11 @@
     <!-- Turn on dynamic assembly attribute generation -->
     <AssemblyAttributesPath>$(IntermediateOutputPath)AssemblyInfo.g.cs</AssemblyAttributesPath>
     <GenerateAdditionalSources>true</GenerateAdditionalSources>
+    <PreReleaseVersion>0</PreReleaseVersion>
   </PropertyGroup>
 
   <!-- Assembly attributes -->
-  <ItemGroup Condition=" '$(SkipAssemblyAttributes)' == 'true' ">
+  <ItemGroup Condition=" '$(SkipAssemblyAttributes)' != 'true' AND '$(IsNetCoreProject)' != 'true' ">
     <!--
       AssemblyVersion and AssemblyFileVersion attributes are generated automatically for every build.
       NuGet package version is derived from AssemblyFileVersion.
