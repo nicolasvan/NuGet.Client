@@ -168,7 +168,7 @@ namespace Dotnet.Integration.Test
             }
         }
 
-        [PlatformFact(Platform.Windows)]
+        [PlatformTheory(Platform.Windows)]
         [InlineData(null,                null,               null,               true,               "",                                                "Analyzers,Build")]
         [InlineData(null,               "Native",            null,               true,               "",                                                "Analyzers,Build,Native")]
         [InlineData("Compile",           null,               null,               true,               "",                                                "Analyzers,Build,Native,Runtime")]
