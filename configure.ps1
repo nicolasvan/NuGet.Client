@@ -12,6 +12,9 @@ Switch to force installation of required tools.
 .PARAMETER CI
 Indicates the build script is invoked from CI
 
+.PARAMETER Test
+Indicates the Tests need to be run. Downloads the Test cli.
+
 .EXAMPLE
 .\configure.ps1 -cc -v
 Clean repo build environment configuration
@@ -28,7 +31,8 @@ Param (
     [switch]$Force,
     [switch]$CI,
     [Alias('s15')]
-    [switch]$SkipVS15
+    [switch]$SkipVS15,
+    [switch]$RunTest
 )
 
 . "$PSScriptRoot\build\common.ps1"
@@ -49,9 +53,11 @@ Invoke-BuildStep 'Installing .NET CLI' {
     Install-DotnetCLI -Force:$Force
 } -ev +BuildErrors
 
-Invoke-BuildStep 'Installing .NET CLI for tests' {
-    Install-DotnetCLI -Test -Force:$Force
-} -ev +BuildErrors
+if($RunTest) {
+    Invoke-BuildStep 'Installing .NET CLI for tests' {
+        Install-DotnetCLI -Test -Force:$Force
+    } -ev +BuildErrors
+}
 
 # Restoring tools required for build
 Invoke-BuildStep 'Restoring solution packages' {
