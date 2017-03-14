@@ -768,7 +768,7 @@ Function Test-ProjectDotnet {
         $opts = @()
 
         $opts += 'test', '--configuration', $Configuration
-        $opts += '--', 'notrait', 'Platform=Linux', '--', 'notrait', 'Platform=Darwin'
+        $opts += '--no-build'
 
         if ($VerbosePreference) {
             $opts += '-verbose'

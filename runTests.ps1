@@ -127,6 +127,17 @@ Invoke-BuildStep 'Restore NuGet.sln - VS15 Toolset for tests' {
     } `
     -skip:($SkipVS15 -and $SkipCore) `
     -ev +BuildErrors
+
+# Building the VS15 Tooling solution
+Invoke-BuildStep 'Building NuGet.sln - VS15 Toolset' {
+        Build-Solution `
+            -Configuration $Configuration `
+            -ReleaseLabel $ReleaseLabel `
+            -BuildNumber $BuildNumber `
+            -ToolsetVersion 15 `
+    } `
+    -skip:$SkipVS15 `
+    -ev +BuildErrors
    
     
 Invoke-BuildStep 'Running NuGet.Core unit-tests' {
