@@ -8,14 +8,14 @@
 
   <!-- Common -->
   <PropertyGroup>
-    <RepositoryRootDirectory>$(MSBuildThisFileDirectory)</RepositoryRootDirectory>
-    <BuildCommonDirectory>$(MSBuildThisFileDirectory)build\</BuildCommonDirectory>
-    <SolutionFile>$(MSBuildThisFileDirectory)$(RepositoryName).sln</SolutionFile>
-    <ArtifactsDirectory>$(MSBuildThisFileDirectory)artifacts\</ArtifactsDirectory>
-    <DotnetExePath>$(MSBuildThisFileDirectory)cli\dotnet.exe</DotnetExePath>
-    <NuGetExePath>$(MSBuildThisFileDirectory).nuget\nuget.exe</NuGetExePath>
-    <SharedDirectory>$(MSBuildThisFileDirectory)Shared</SharedDirectory>
-    <NuGetCoreSrcDirectory>$(MSBuildThisFileDirectory)src\NuGet.Core\</NuGetCoreSrcDirectory>
+    <RepositoryRootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\</RepositoryRootDirectory>
+    <BuildCommonDirectory>$(RepositoryRootDirectory)build\</BuildCommonDirectory>
+    <SolutionFile>$(RepositoryRootDirectory)$(RepositoryName).sln</SolutionFile>
+    <ArtifactsDirectory>$(RepositoryRootDirectory)artifacts\</ArtifactsDirectory>
+    <DotnetExePath>$(RepositoryRootDirectory)cli\dotnet.exe</DotnetExePath>
+    <NuGetExePath>$(RepositoryRootDirectory).nuget\nuget.exe</NuGetExePath>
+    <SharedDirectory>$(RepositoryRootDirectory)Shared</SharedDirectory>
+    <NuGetCoreSrcDirectory>$(RepositoryRootDirectory)src\NuGet.Core\</NuGetCoreSrcDirectory>
     <NupkgOutputDirectory>$(ArtifactsDirectory)nupkgs</NupkgOutputDirectory>
   </PropertyGroup>
 
