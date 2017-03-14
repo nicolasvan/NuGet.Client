@@ -174,20 +174,9 @@ namespace NuGet.Protocol.Core.Types
 
             EnsurePackageFileExists(packagePath, packagesToPush);
 
-            var useTempApiKey = IsSourceNuGetSymbolServer(source);
-
             foreach (string packageToPush in packagesToPush)
             {
-                var packageApiKey = apiKey;
-                if (useTempApiKey)
-                {
-                    using (var packageReader = new PackageArchiveReader(packageToPush))
-                    {
-                        // If user push to https://nuget.smbsrc.net/, use temp api key.
-                        packageApiKey = await GetSecureApiKey(packageReader.GetIdentity(), apiKey, log, token);
-                    }
-                }
-                await PushPackageCore(source, packageApiKey, packageToPush, requestTimeout, log, token);
+                await PushPackageCore(source, apiKey, packageToPush, requestTimeout, log, token);
             }
         }
 
@@ -290,19 +279,75 @@ namespace NuGet.Protocol.Core.Types
             CancellationToken token)
         {
             var serviceEndpointUrl = GetServiceEndpointUrl(source, string.Empty);
-            await _httpSource.ProcessResponseAsync(
-                new HttpSourceRequest(() => CreateRequest(serviceEndpointUrl, pathToPackage, apiKey, logger))
-                {
-                    RequestTimeout = requestTimeout
-                },
-                response =>
-                {
-                    response.EnsureSuccessStatusCode();
+            var useTempApiKey = IsSourceNuGetSymbolServer(source);
 
-                    return Task.FromResult(0);
-                },
-                logger,
-                token);
+            if (useTempApiKey)
+            {
+                var maxTries = 3;
+                using (var packageReader = new PackageArchiveReader(pathToPackage))
+                {
+                    var packageIdentity = packageReader.GetIdentity();
+
+                    for (var retry = 0; retry < maxTries; ++retry)
+                    {
+                        try
+                        {
+                            // If user push to https://nuget.smbsrc.net/, use temp api key.
+                            var tmpApiKey = await GetSecureApiKey(packageIdentity, apiKey, requestTimeout, logger, token);
+
+                            await _httpSource.ProcessResponseAsync(
+                                new HttpSourceRequest(() => CreateRequest(serviceEndpointUrl, pathToPackage, tmpApiKey, logger))
+                                {
+                                    RequestTimeout = requestTimeout,
+                                    MaxTries = 1
+                                },
+                                response =>
+                                {
+                                    response.EnsureSuccessStatusCode();
+
+                                    return Task.FromResult(0);
+                                },
+                                logger,
+                                token);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            throw;
+                        }
+                        catch (Exception e)
+                        {
+                            if (retry == maxTries - 1)
+                            {
+                                throw;
+                            }
+
+                            logger.LogInformation(string.Format(
+                                CultureInfo.CurrentCulture,
+                                Strings.Log_RetryingHttp,
+                                HttpMethod.Put,
+                                source)
+                                + Environment.NewLine
+                                + ExceptionUtilities.DisplayMessage(e));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                await _httpSource.ProcessResponseAsync(
+                    new HttpSourceRequest(() => CreateRequest(serviceEndpointUrl, pathToPackage, apiKey, logger))
+                    {
+                        RequestTimeout = requestTimeout
+                    },
+                    response =>
+                    {
+                        response.EnsureSuccessStatusCode();
+
+                        return Task.FromResult(0);
+                    },
+                    logger,
+                    token);
+            }
         }
 
         private HttpRequestMessage CreateRequest(
@@ -550,6 +595,7 @@ namespace NuGet.Protocol.Core.Types
         private async Task<string> GetSecureApiKey(
             PackageIdentity packageIdentity,
             string apiKey,
+            TimeSpan requestTimeout,
             ILogger logger,
             CancellationToken token)
         {
@@ -567,14 +613,18 @@ namespace NuGet.Protocol.Core.Types
                         () =>
                         {
                             var request = HttpRequestMessageFactory.Create(
-                                HttpMethod.Put,
+                                HttpMethod.Post,
                                 serviceEndpointUrl,
                                 new HttpRequestMessageConfiguration(
                                     logger: logger,
                                     promptOn403: false));
                             request.Headers.Add(ApiKeyHeader, apiKey);
                             return request;
-                        }),
+                        })
+                    {
+                        RequestTimeout = requestTimeout,
+                        MaxTries = 1
+                    },
                    logger,
                    token);
 

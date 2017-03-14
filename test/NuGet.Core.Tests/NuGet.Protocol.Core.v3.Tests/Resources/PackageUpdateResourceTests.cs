@@ -263,7 +263,7 @@ namespace NuGet.Protocol.Tests
                         "https://www.nuget.org/api/v2/package/create-verification-key/test/1.0.0",
                         request =>
                         {
-                            var content = new StringContent(JsonData.tempApiKeyJsonData, Encoding.UTF8, "application/json");
+                            var content = new StringContent(String.Format(JsonData.tempApiKeyJsonData,"tempkey"), Encoding.UTF8, "application/json");
                             var response = new HttpResponseMessage(HttpStatusCode.OK);
                             response.Content = content;
                             return Task.FromResult(response);
@@ -419,7 +419,7 @@ namespace NuGet.Protocol.Tests
                     getApiKey: _ => apiKey,
                     getSymbolApiKey: _ => apiKey,
                     log: NullLogger.Instance);
-                
+
                 // Assert
                 IEnumerable<string> apiValues;
                 IEnumerable<string> symbolClientVersionValues;
@@ -469,7 +469,7 @@ namespace NuGet.Protocol.Tests
                         "https://www.nuget.org/api/v2/package/create-verification-key/test/1.0.0",
                         request =>
                         {
-                            var content = new StringContent(JsonData.tempApiKeyJsonData, Encoding.UTF8, "application/json");
+                            var content = new StringContent(String.Format(JsonData.tempApiKeyJsonData,"tempkey"), Encoding.UTF8, "application/json");
                             var response = new HttpResponseMessage(HttpStatusCode.OK);
                             response.Content = content;
                             return Task.FromResult(response);
@@ -531,7 +531,7 @@ namespace NuGet.Protocol.Tests
                         "https://www.nuget.org/api/v2/package/create-verification-key/test/1.0.0",
                         request =>
                         {
-                            var content = new StringContent(JsonData.tempApiKeyJsonData, Encoding.UTF8, "application/json");
+                            var content = new StringContent(String.Format(JsonData.tempApiKeyJsonData, "tempkey"), Encoding.UTF8, "application/json");
                             var response = new HttpResponseMessage(HttpStatusCode.OK);
                             response.Content = content;
                             return Task.FromResult(response);
@@ -626,6 +626,77 @@ namespace NuGet.Protocol.Tests
                 // Assert
                 Assert.True(ex.Message.Contains("Response status code does not indicate success: 500 (Internal Server Error)"));
 
+            }
+        }
+
+        [Fact]
+        public async Task PackageUpdateResource_RetryNuGetSymbolPushing()
+        {
+            // Arrange
+            using (var workingDir = TestDirectory.Create())
+            {
+                var source = "https://nuget.smbsrc.net/";
+                var symbolRequest = new List<HttpRequestMessage>();
+                var apiKey = "serverapikey";
+                var symbolSourceRequestCount = 0;
+                var createKeyRequestCount = 0;
+
+                var symbolPackageInfo = SimpleTestPackageUtility.CreateSymbolPackage(workingDir, "test", "1.0.0");
+
+                var responses = new Dictionary<string, Func<HttpRequestMessage, Task<HttpResponseMessage>>>
+                {
+                    {
+                        "https://nuget.smbsrc.net/api/v2/package/",
+                        request =>
+                        {
+                            symbolRequest.Add(request);
+                            symbolSourceRequestCount++;
+                            if (symbolSourceRequestCount < 3)
+                            {
+                                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+                            }
+                            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+                        }
+                    },
+                    {
+                        "https://www.nuget.org/api/v2/package/create-verification-key/test/1.0.0",
+                         request =>
+                         {
+                            createKeyRequestCount++;
+                            var content = new StringContent(string.Format(JsonData.tempApiKeyJsonData, $"tempkey{createKeyRequestCount}"), Encoding.UTF8, "application/json");
+                            var response = new HttpResponseMessage(HttpStatusCode.OK);
+                            response.Content = content;
+                            return Task.FromResult(response);
+                         }
+                    }
+
+                };
+
+                var repo = StaticHttpHandler.CreateSource(source, Repository.Provider.GetCoreV3(), responses);
+                var resource = await repo.GetResourceAsync<PackageUpdateResource>();
+                UserAgent.SetUserAgentString(new UserAgentStringBuilder("test client"));
+
+                // Act
+                await resource.Push(
+                    packagePath: symbolPackageInfo.FullName,
+                    symbolSource: null,
+                    timeoutInSecond: 5,
+                    disableBuffering: false,
+                    getApiKey: _ => apiKey,
+                    getSymbolApiKey: _ => null,
+                    log: NullLogger.Instance);
+
+                // Assert
+                var apikeys = new List<string>();
+
+                Assert.Equal(3, symbolRequest.Count);
+
+                IEnumerable<string> apiValues;
+                for (var i = 1; i <= 3; i++)
+                {
+                    symbolRequest[i - 1].Headers.TryGetValues(ApiKeyHeader, out apiValues);
+                    Assert.Equal($"tempkey{i}", apiValues.First());
+                }
             }
         }
     }
