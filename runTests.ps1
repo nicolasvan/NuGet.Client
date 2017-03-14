@@ -123,19 +123,25 @@ Invoke-BuildStep 'Publishing NuGet.Clients packages - VS15 Toolset' {
     
     
 Invoke-BuildStep 'Running NuGet.Core unit-tests' {
-        Test-Projects $Configuration NuGet.Core.Tests
+        Test-Projects `
+        -Configuration $Configuration `
+        -TestType NuGet.Core.Tests
     } `
     -skip:($SkipCore -or $SkipUnitTests) `
     -ev +BuildErrors
 
 Invoke-BuildStep 'Running NuGet.Core functional tests' {
-        Test-Projects $Configuration NuGet.Core.FuncTests
+        Test-Projects `
+        -Configuration $Configuration `
+        -TestType NuGet.Core.FuncTests
     } `
     -skip:($SkipCore -or $SkipFuncTests) `
     -ev +BuildErrors
 
 Invoke-BuildStep 'Running NuGet.Clients unit-tests - VS15 Toolset' {
-        Test-Projects $Configuration NuGet.Client.Tests
+        Test-Projects `
+        -Configuration $Configuration `
+        -TestType NuGet.Client.Tests
     } `
     -skip:($SkipVS15 -or $SkipUnitTests) `
     -ev +BuildErrors
