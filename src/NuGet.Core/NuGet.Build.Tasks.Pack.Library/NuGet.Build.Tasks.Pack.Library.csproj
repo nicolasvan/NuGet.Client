@@ -14,8 +14,6 @@
   <ItemGroup>
     <Compile Include="..\NuGet.Build.Tasks\Common\*.cs" />
     <Content Include="Pack.targets">
-      <PackagePath>build;buildCrossTargeting</PackagePath>
-      <Pack>true</Pack>
     </Content>
   </ItemGroup>
 
@@ -35,4 +33,9 @@
   </ItemGroup>
 
   <Import Project="$(BuildCommonDirectory)common.targets" />
+
+  <PropertyGroup>
+    <NuspecFile>NuGet.Build.Tasks.Pack.nuspec</NuspecFile>
+    <NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
+  </PropertyGroup>
 </Project>
