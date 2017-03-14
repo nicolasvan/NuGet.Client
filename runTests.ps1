@@ -127,8 +127,7 @@ Invoke-BuildStep 'Restore NuGet.sln - VS15 Toolset for tests' {
     } `
     -skip:($SkipVS15 -and $SkipCore) `
     -ev +BuildErrors
-
-    
+   
     
 Invoke-BuildStep 'Running NuGet.Core unit-tests' {
         Test-Projects $Configuration NuGet.Core.Tests
@@ -136,11 +135,11 @@ Invoke-BuildStep 'Running NuGet.Core unit-tests' {
     -skip:($SkipCore -or $SkipUnitTests) `
     -ev +BuildErrors
 
-Invoke-BuildStep 'Running NuGet.Core functional tests' {
-        Test-Projects $Configuration NuGet.FuncCore.Tests
-    } `
-    -skip:($SkipCore -or $SkipFuncTests) `
-    -ev +BuildErrors
+#Invoke-BuildStep 'Running NuGet.Core functional tests' {
+#        Test-Projects $Configuration NuGet.FuncCore.Tests
+#    } `
+#    -skip:($SkipCore -or $SkipFuncTests) `
+#    -ev +BuildErrors
 
 
 

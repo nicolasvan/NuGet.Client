@@ -760,33 +760,40 @@ Function Test-ProjectDotnet {
         [string]$Configuration = $DefaultConfiguration,
         [string]$ToolsetVersion
     )
+
+    if ($XProjectLocation.EndsWith("Test", "CurrentCultureIgnoreCase") -or $XProjectLocation.EndsWith("Tests", "CurrentCultureIgnoreCase"))
+    {
+        Write-Host "Testing $XProjectLocation"
     
-    Write-Host "Testing $XProjectLocation"
+        $opts = @()
+
+        $opts += 'test', '--configuration', $Configuration
+        $opts += '--', 'notrait', 'Platform=Linux', '--', 'notrait', 'Platform=Darwin'
+
+        if ($VerbosePreference) {
+            $opts += '-verbose'
+        }
     
-    $opts = @()
+        if($ToolsetVersion) {
+            $opts += '-ToolsetVersion', $ToolsetVersion
+        }
+        pushd $XProjectLocation
 
-    $opts += 'test', '--configuration', $Configuration
-    $opts += '--', 'notrait', 'Platform=Linux', '--', 'notrait', 'Platform=Darwin'
+        try {
+            Trace-Log "$DotNetExe $opts"
+            & $DotNetExe $opts
+        }
+        finally {
+            popd
+        }
 
-    if ($VerbosePreference) {
-        $opts += '-verbose'
+        if ($LASTEXITCODE -ne 0) {
+            Error-Log "Tests failed @""$XProjectLocation"" on CoreCLR. Code: $LASTEXITCODE"
+        }
     }
-    
-    if($ToolsetVersion) {
-        $opts += '-ToolsetVersion', $ToolsetVersion
-    }
-    pushd $XProjectLocation
-
-    try {
-        Trace-Log "$DotNetExe $opts"
-        & $DotNetExe $opts
-    }
-    finally {
-        popd
-    }
-
-    if ($LASTEXITCODE -ne 0) {
-        Error-Log "Tests failed @""$XProjectLocation"" on CoreCLR. Code: $LASTEXITCODE"
+    else
+    {
+        Write-Host "Skipping non-test project $XProjectLocation"
     }
 }
 
