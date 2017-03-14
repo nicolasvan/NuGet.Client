@@ -1,7 +1,10 @@
 ﻿{
   "dependencies": {
     "Microsoft.VisualStudio.Shell.Immutable.14.0": "14.3.25407",
-    "Newtonsoft.Json": "6.0.4"
+    "Moq": "4.7.1",
+    "Newtonsoft.Json": "6.0.4",
+    "xunit": "2.2.0",
+    "xunit.runner.visualstudio": "2.2.0"
   },
   "frameworks": {
     "net46": {}

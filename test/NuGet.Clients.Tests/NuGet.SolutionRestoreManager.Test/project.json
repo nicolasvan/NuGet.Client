@@ -1,6 +1,9 @@
 ﻿{
   "dependencies": {
-    "System.ValueTuple": "4.3.0-preview1-24530-04"
+    "System.ValueTuple": "4.3.0-preview1-24530-04",
+    "Moq": "4.7.1",
+    "xunit": "2.2.0",
+    "xunit.runner.visualstudio": "2.2.0"
   },
   "frameworks": {
     "net46": {}

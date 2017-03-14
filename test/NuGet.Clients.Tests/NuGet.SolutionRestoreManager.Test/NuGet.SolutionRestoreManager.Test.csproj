@@ -66,6 +66,7 @@
     
     <ProjectReference Include="$(NuGetCoreSrcDirectory)\Test.Utility\Test.Utility.csproj" />
   </ItemGroup>
+  <Import Project="$(BuildCommonDirectory)legacy.imports.targets"/> 
   <!-- Common.Targets should be imported before Microsoft.CSharp.targets -->
   <Import Project="$(BuildCommonDirectory)common.targets"/>   
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
