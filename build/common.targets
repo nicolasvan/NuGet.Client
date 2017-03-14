@@ -18,6 +18,12 @@
     <Import Project="sign.targets" />
   </ImportGroup>
 
+  <!-- docs -->
+  <PropertyGroup>
+    <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' AND '$(PackProject)' == 'true' ">true</GenerateDocumentationFile>
+    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' ">$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
   <!-- These are needed because currently a VSIX project cannot reference a net core project that multi targets -->
   <Target Name="BuiltProjectOutputGroupDependencies" Condition=" '$(IsNetCoreProject)' == 'true' " />
   <Target Name="BuiltProjectOutputGroup" Condition=" '$(IsNetCoreProject)' == 'true' " />

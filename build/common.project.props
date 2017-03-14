@@ -26,7 +26,6 @@
   <!-- Defaults -->
   <PropertyGroup>
     <TreatWarningsAsErrors Condition=" '$(TreatWarningsAsErrors)' == '' ">true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' AND '$(PackProject)' == 'true' ">true</GenerateDocumentationFile>
     <GenerateAssemblyCompanyAttribute Condition=" '$(GenerateAssemblyCompanyAttribute)' == '' ">false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute Condition=" '$(GenerateAssemblyProductAttribute)' == '' ">false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute Condition=" '$(GenerateAssemblyCopyrightAttribute)' == '' ">false</GenerateAssemblyCopyrightAttribute>
@@ -173,4 +172,5 @@
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
     <ProduceOutputsOnBuild>True</ProduceOutputsOnBuild>
   </PropertyGroup>
+ 
 </Project>

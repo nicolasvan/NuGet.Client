@@ -5,6 +5,7 @@
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <Shipping>true</Shipping>
+    <PackProject>true</PackProject>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -47,6 +48,20 @@
     <PackageReference Version="4.0.0-*" Include="NuGet.Protocol.VisualStudio" />
     <PackageReference Include="VSSDK.TemplateWizardInterface" Version="12.0.4" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <NuspecFile>NuGet.VisualStudio.nuspec</NuspecFile>
+    <NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
+  </PropertyGroup>
+
+  <!--
+  <ItemGroup>
+    <None Include="install.ps1">
+      <PackagePath>tools\</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
+  -->
 
   <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>

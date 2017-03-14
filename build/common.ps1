@@ -958,31 +958,6 @@ Function Publish-ClientsPackages {
             -Version $releaseNupkgVersion `
             -Configuration $Configuration
     }
-
-    # Pack the NuGet.VisualStudio project with the buildbuild number and release label.
-    $projectDir = [io.path]::combine($NuGetClientRoot, "src", "NuGet.Clients", "NuGet.VisualStudio")
-    $projectNuspec = Join-Path $projectDir "NuGet.VisualStudio.nuspec"
-    $projectInputDir = [io.path]::combine($Artifacts, "NuGet.VisualStudio", "${ToolsetVersion}.0", "${Configuration}")
-    $projectInstallPs1 = Join-Path $projectDir "install.ps1"
-
-    Copy-Item -Path "${projectInstallPs1}" -Destination "${projectInputDir}"
-
-    New-NuGetPackage `
-        -NuspecPath $projectNuspec `
-        -BasePath $projectInputDir `
-        -OutputDir $Nupkgs `
-        -Version $prereleaseNupkgVersion `
-        -Configuration $Configuration
-
-    if ($CI) {
-        # Pack the NuGet.VisualStudio project with just the release label.
-        New-NuGetPackage `
-            -NuspecPath $projectNuspec `
-            -BasePath $projectInputDir `
-            -OutputDir $ReleaseNupkgs `
-            -Version $releaseNupkgVersion `
-            -Configuration $Configuration
-    }
 }
 
 Function New-NuGetPackage {

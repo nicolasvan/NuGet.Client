@@ -50,10 +50,6 @@
     <Copy SourceFiles="%(PackageInclude.Identity)" DestinationFolder="$(TargetDir)" />
     <Exec Command="$(NuGetExePath) pack %(Nuspec.Identity) -Version $(Version) -BasePath $(TargetDir) -OutputDirectory $(NupkgOutputDirectory) -Verbosity detailed" />
   </Target>
-
-  <PropertyGroup>
-    <DocumentationFile>$(OutputPath)\NuGet.SolutionRestoreManager.Interop.XML</DocumentationFile>
-  </PropertyGroup>
   
   <Import Project="$(BuildCommonDirectory)legacy.imports.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
