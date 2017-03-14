@@ -94,7 +94,7 @@ namespace NuGet.XPlat.FuncTest
         {
             return directoryInfo
                 .EnumerateDirectories()
-                .Any(dir => StringComparer.Ordinal.Equals(dir.Name, subDirectory));
+                .Any(dir => StringComparer.OrdinalIgnoreCase.Equals(dir.Name, subDirectory));
         }
 
         /// <summary>

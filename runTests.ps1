@@ -43,6 +43,8 @@ param (
     [ValidateSet("debug", "release")]
     [Alias('c')]
     [string]$Configuration,
+    [Alias('sb')]
+    [switch]$SkipBuild,
     [Alias('sc')]
     [switch]$SkipCore,
     [Alias('s14')]
@@ -104,9 +106,22 @@ Invoke-BuildStep 'Building NuGet.sln - VS15 Toolset for tests' {
             -BuildNumber $BuildNumber `
             -ToolsetVersion 15 `
     } `
-    -skip:($SkipVS15 -and $SkipCore) `
+    -skip:($SkipVS15 -or $SkipBuild) `
     -ev +BuildErrors
-   
+
+Invoke-BuildStep 'Publishing NuGet.Clients packages - VS15 Toolset' {
+        Publish-ClientsPackages `
+            -Configuration $Configuration `
+            -ReleaseLabel $DefaultReleaseLabel `
+            -BuildNumber $BuildNumber `
+            -ToolsetVersion 15 `
+            -KeyFile $MSPFXPath `
+            -CI:$CI
+    } `
+    -skip:($SkipVS15 -or $SkipBuild) `
+    -ev +BuildErrors
+    
+    
 Invoke-BuildStep 'Running NuGet.Core unit-tests' {
         Test-Projects $Configuration NuGet.Core.Tests
     } `
@@ -114,7 +129,7 @@ Invoke-BuildStep 'Running NuGet.Core unit-tests' {
     -ev +BuildErrors
 
 Invoke-BuildStep 'Running NuGet.Core functional tests' {
-        Test-Projects $Configuration NuGet.FuncCore.Tests
+        Test-Projects $Configuration NuGet.Core.FuncTests
     } `
     -skip:($SkipCore -or $SkipFuncTests) `
     -ev +BuildErrors
@@ -126,7 +141,7 @@ Invoke-BuildStep 'Running NuGet.Clients unit-tests - VS15 Toolset' {
     -ev +BuildErrors
 
 # Invoke-BuildStep 'Running NuGet.Clients func-tests - VS14 Toolset' {
-        # Test-FuncClientProjects $Configuration
+        # Test-FuncClientProjects $Configuration NuGet.Client.FuncTests
     # } `
     # -skip:($SkipVS14 -or $SkipFuncTests) `
     # -ev +BuildErrors
