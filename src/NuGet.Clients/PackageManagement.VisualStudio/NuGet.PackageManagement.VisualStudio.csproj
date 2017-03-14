@@ -268,6 +268,12 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="$(SharedDirectory)\HashCodeCombiner.cs">
+      <Link>HashCodeCombiner.cs</Link>
+    </Compile>
+  </ItemGroup>
+
   <Import Project="$(BuildCommonDirectory)common.targets" />
   <Import Project="$(BuildCommonDirectory)legacy.imports.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

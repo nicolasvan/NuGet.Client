@@ -97,5 +97,12 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\NuGet.Core\NuGet.Build.Tasks\NuGet.targets">
+      <Link>NuGet.targets</Link>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>

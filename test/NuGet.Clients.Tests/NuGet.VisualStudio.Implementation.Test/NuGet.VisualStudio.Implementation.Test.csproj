@@ -5,6 +5,7 @@
     <TargetFrameworks>net46</TargetFrameworks>
     <TargetFrameworks Condition=" '$(IsXPlat)' == 'true' "></TargetFrameworks>
     <TestProject>true</TestProject>
+    <SkipShared>true</SkipShared>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,10 +42,6 @@
     <ProjectReference Include="..\..\..\src\NuGet.Clients\NuGet.VisualStudio\NuGet.VisualStudio.csproj">
       <Project>{E5556BC6-A7FD-4D8E-8A7D-7648DF1D7471}</Project>
       <Name>NuGet.VisualStudio</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\NuGet.Clients\PackageManagement.VisualStudio\NuGet.PackageManagement.VisualStudio.csproj">
-      <Project>{306cddfa-ff0b-4299-930c-9ec6c9308160}</Project>
-      <Name>NuGet.PackageManagement.VisualStudio</Name>
     </ProjectReference>
 
     <ProjectReference Include="..\..\..\src\NuGet.Clients\PackageManagement.VisualStudio\NuGet.PackageManagement.VisualStudio.csproj">
