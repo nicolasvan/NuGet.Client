@@ -12,6 +12,7 @@ namespace NuGet.XPlat.FuncTest
     public class XPlatRestoreTests
     {
         [Theory(Skip = "Restore was removed! Update these tests!")]
+        //[FileExistsInNuGetRoamingTheory(XPlatTestUtils.CoreConfigFileName)]
         // Try with config file in the project directory
         //[InlineData(TestServers.Artifactory)]
         [InlineData(TestServers.Klondike)]
@@ -59,6 +60,7 @@ namespace NuGet.XPlat.FuncTest
         }
 
         [Theory(Skip = "Restore was removed! Update these tests!")]
+        // [FileExistsInNuGetRoamingTheory(XPlatTestUtils.CoreConfigFileName)]
         // Try with config file in a different directory
         //[InlineData(TestServers.Artifactory)]
         [InlineData(TestServers.Klondike)]
