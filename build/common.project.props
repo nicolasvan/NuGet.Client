@@ -81,16 +81,6 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(VSSDKRoot)\tools</VSToolsPath>
   </PropertyGroup>
 
-  <!-- This is not curently needed.
-  <PropertyGroup Condition=" '$(BuildNumber)' == '' ">
-    <SemanticVersionDate>2017-02-27</SemanticVersionDate>
-    <Ticks1>$([System.DateTime]::Parse($(SemanticVersionDate)).Ticks)</Ticks1>
-    <Ticks2>$([System.DateTime]::Now.Ticks)</Ticks2>
-    <SpanTicks>$([MSBuild]::Subtract($(Ticks2), $(Ticks1)))</SpanTicks>
-    <SpanMinutes>$([System.TimeSpan]::FromTicks($(SpanTicks)).TotalMinutes)</SpanMinutes>
-    <BuildNumber>$([System.String]::Format('{0:F0}', $([MSBuild]::Divide($([System.Convert]::ToDouble($(SpanMinutes))), 5))))</BuildNumber>
-  </PropertyGroup> -->
-
   <PropertyGroup Condition=" '$(PreReleaseVersion)' == '' ">
     <PreReleaseVersion>0</PreReleaseVersion>
   </PropertyGroup>
@@ -172,5 +162,9 @@
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
     <ProduceOutputsOnBuild>True</ProduceOutputsOnBuild>
   </PropertyGroup>
- 
+
+  <!-- Add symbols to the dll for test dlls -->
+  <PropertyGroup Condition=" '$(TestProject)' == 'true' ">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
 </Project>
