@@ -3,6 +3,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+    <Shipping>true</Shipping>
+    <PackProject>true</PackProject>
     <Description>NuGet restore for dotnet CLI</Description>    
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(NetStandardPackageVersion)</NetStandardImplicitPackageVersion>
