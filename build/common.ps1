@@ -451,7 +451,7 @@ Function Build-SolutionOrProject {
     $buildArgs += "/p:PackProjects=true"
 
     # Parallel build
-    $buildArgs += "/m"
+    # $buildArgs += "/m"
 
     # if (-not $VerbosePreference) {
         # $buildArgs += '/v:m'
