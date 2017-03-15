@@ -58,6 +58,7 @@
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
+
   <ItemGroup>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -66,10 +67,4 @@
 
   <Import Project="$(BuildCommonDirectory)common.targets" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
-  <!-- TODO Reenable this
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /diy $(ArtifactRoot)\TestableCredentialProvider\$(OutDirFx). $(TestTargetDir)\TestableCredentialProvider
-xcopy /diy $(ArtifactRoot)\SampleCommandLineExtensions\$(OutDirFx)SampleCommandLineExtensions.dll $(TestTargetDir)</PostBuildEvent>
-  </PropertyGroup> -->
 </Project>
