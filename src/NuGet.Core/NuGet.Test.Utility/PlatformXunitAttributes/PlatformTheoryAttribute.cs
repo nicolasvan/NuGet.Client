@@ -21,12 +21,12 @@ namespace NuGet.Test.Utility
 
                 if (string.IsNullOrEmpty(skip))
                 {
-                    skip = PlatformTestUtility.GetSkipMessageOrNull(GetAllPlatforms());
+                    skip = XunitAttributeUtility.GetPlatformSkipMessageOrNull(GetAllPlatforms());
                 }
 
                 if (string.IsNullOrEmpty(skip))
                 {
-                    skip = PlatformTestUtility.GetMonoMessage(OnlyOnMono, SkipMono);
+                    skip = XunitAttributeUtility.GetMonoMessage(OnlyOnMono, SkipMono);
                 }
 
                 // If this is null the test will run.

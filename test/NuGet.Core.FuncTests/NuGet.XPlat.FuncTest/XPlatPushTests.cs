@@ -11,7 +11,7 @@ namespace NuGet.XPlat.FuncTest
 {
     public class XPlatPushTests
     {
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(XPlatTestUtils.CoreConfigFileName, XPlatTestUtils.ProtocolConfigFileName)]
         [InlineData(TestServers.MyGet, nameof(TestServers.MyGet), false)]
         [InlineData(TestServers.ProGet, nameof(TestServers.ProGet), false)]
         [InlineData(TestServers.Nexus, nameof(TestServers.Nexus), true)]
