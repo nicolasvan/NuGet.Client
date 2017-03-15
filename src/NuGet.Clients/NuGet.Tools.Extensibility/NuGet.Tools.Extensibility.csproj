@@ -13,16 +13,16 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NuGetVSExtension</RootNamespace>
-    <GeneratePkgDefFile>true</GeneratePkgDefFile>
-    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
-    <IncludeCopyLocalReferencesInVSIXContainer>true</IncludeCopyLocalReferencesInVSIXContainer>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeCopyLocalReferencesInVSIXContainer>false</IncludeCopyLocalReferencesInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
-    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
-    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
-    <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
     <DeployExtension>false</DeployExtension>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <AssemblyName>NuGet.Tools</AssemblyName>
+    <AssemblyName>NuGet.Tools.Ext</AssemblyName>
     <VSSDKTargetPlatformRegRootSuffix>Exp</VSSDKTargetPlatformRegRootSuffix>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '14.0'">
@@ -33,11 +33,11 @@
     <IsProductComponent>true</IsProductComponent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '15.0' AND '$(IsInsertable)' == 'true'">
-      <VsixOutputDirName>VS15</VsixOutputDirName>
-      <IsProductComponent>true</IsProductComponent>
-      <ExtensionInstallationRoot>CommonExtensions</ExtensionInstallationRoot>
-      <ExtensionInstallationFolder>Microsoft\NuGet</ExtensionInstallationFolder>
-    </PropertyGroup>
+    <VsixOutputDirName>VS15</VsixOutputDirName>
+    <IsProductComponent>true</IsProductComponent>
+    <ExtensionInstallationRoot>CommonExtensions</ExtensionInstallationRoot>
+    <ExtensionInstallationFolder>Microsoft\NuGet</ExtensionInstallationFolder>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And '$(BuildingInsideVisualStudio)' == 'True'">
     <StartAction>Program</StartAction>
     <StartProgram>$(DevEnvDir)devenv.exe</StartProgram>
@@ -46,31 +46,7 @@
     <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DataStreamFromComStream.cs" />
-    <Compile Include="FontAndColorsRegistrationAttribute.cs" />
-    <Compile Include="Guids.cs" />
-    <Compile Include="NuGetSettings.cs" />
-    <Compile Include="NuGetUIFactory.cs" />
-    <Compile Include="OutputConsoleLogger.cs" />
-    <Compile Include="SolutionUserOptions.cs" />
-    <Compile Include="NuGetSearchProvider.cs" />
-    <Compile Include="NuGetSearchTask.cs" />
-    <Compile Include="NuGetStaticSearchResult.cs" />
-    <Compile Include="PackageManagerWindowPane.cs" />
-    <Compile Include="PkgCmdID.cs" />
-    <Compile Include="NuGetPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProvideExpressLoadKeyAttribute.cs" />
-    <Compile Include="ProvideSearchProviderAttribute.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Commands\ShowErrorsCommand.cs" />
-    <Compile Include="Handlers\ProjectRetargetingHandler.cs" />
-    <Compile Include="Handlers\ProjectUpgradeHandler.cs" />
-    <Compile Include="VsUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\NuGet.Core\NuGet.Build.Tasks\NuGet.targets">
@@ -87,18 +63,10 @@
       <Link>Modules\NuGet\NuGet.PackageManagement.PowerShellCmdlets.dll-Help.xml</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Resources\nuget_256.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Resources\nuget_96.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <VSCTCompile Include="NuGetTools.vsct">
+    <!--<VSCTCompile Include="..\NuGet.Tools\NuGetTools.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
-    </VSCTCompile>
+    </VSCTCompile>-->
     <Content Include="..\VsConsole\PowerShellHost\Scripts\Add-WrapperMembers.ps1">
       <Link>Modules\NuGet\Add-WrapperMembers.ps1</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -123,11 +91,14 @@
       <Link>Modules\NuGet\Profile.ps1</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <None Include="project.json" />
-    <None Include="Resources\nugetAbout.ico" />
-    <None Include="Resources\Toolbar.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NuGet.Tools\NuGet.Tools.csproj">
+      <Project>{E030F195-BC08-4E51-81FF-772FEF22AC33}</Project>
+      <Name>NuGet.Tools</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bPkgdefProjectOutputGroup</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\NuGet.Credentials\NuGet.Credentials.csproj">
       <Project>{32a23995-14c7-483b-98c3-0ae4185373ea}</Project>
       <Name>NuGet.Credentials</Name>
@@ -233,7 +204,7 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Choose>
+  <!--<Choose>
     <When Condition="'$(VisualStudioVersion)' == '14.0'">
       <ItemGroup>
         <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -244,8 +215,8 @@
         <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
       </ItemGroup>
     </When>
-  </Choose>
-  <ItemGroup>
+  </Choose>-->
+  <!--<ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
@@ -275,19 +246,7 @@
     <Reference Include="WindowsBase">
       <Private>False</Private>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VSPackage.resx">
-      <MergeWithCTO>true</MergeWithCTO>
-      <ManifestResourceName>VSPackage</ManifestResourceName>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
+  </ItemGroup>-->
   <Choose>
     <When Condition="'$(Configuration)' == 'Release'">
       <ItemGroup>
@@ -337,9 +296,11 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
-  <Target Name="AfterBuild" DependsOnTargets="PublishVS14;PublishVS15;PublishVS15Insertable"/>
-  <Target Name="PublishVS14"  Condition="'$(VisualStudioVersion)' == '14.0'">
+  <ItemGroup>
+    <None Include="project.json" />
+  </ItemGroup>
+  <Target Name="AfterBuild" DependsOnTargets="PublishVS14;PublishVS15;PublishVS15Insertable" />
+  <Target Name="PublishVS14" Condition="'$(VisualStudioVersion)' == '14.0'">
     <PropertyGroup>
       <PublishDestination>$(ArtifactRoot)\$(VsixOutputDirName)</PublishDestination>
     </PropertyGroup>
@@ -357,7 +318,7 @@
       <PublishDestination>$(ArtifactRoot)\$(VsixOutputDirName)</PublishDestination>
     </PropertyGroup>
     <ItemGroup>
-      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json"/>
+      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json" />
     </ItemGroup>
     <Message Text="Publishing VS15 VSIX package files..." Importance="high" />
     <Message Text="$(TargetVsixContainer) -&gt; $(PublishDestination)" Importance="high" />
@@ -375,7 +336,7 @@
       <PublishDestination>$(ArtifactRoot)\$(VsixOutputDirName)</PublishDestination>
     </PropertyGroup>
     <ItemGroup>
-      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json"/>
+      <PackageManifest Include="$(OutputPath)Microsoft.VisualStudio.NuGet.Core.json" />
     </ItemGroup>
     <Message Text="Publishing VS15 Insertable VSIX package files..." Importance="high" />
     <Message Text="$(TargetVsixContainer) -&gt; $(PublishDestination)\Insertable" Importance="high" />
