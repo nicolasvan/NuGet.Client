@@ -134,7 +134,7 @@ Invoke-BuildStep 'Building NuGet.Clients projects - VS15 Toolset' {
 ## Building the VS15 NuGet.Tools.vsix for VS insertion
 Invoke-BuildStep 'Building NuGet.Tools.vsix for VS Insertion - VS15 Toolset' {
         Build-ClientsProjectHelper `
-        -SolutionOrProject (Join-Path $NuGetClientRoot .\src\NuGet.Clients\NuGet.Tools\NuGet.Tools.csproj -Resolve)`
+        -SolutionOrProject (Join-Path $NuGetClientRoot .\src\NuGet.Clients\NuGet.Tools.Extensibility\NuGet.Tools.Extensibility.csproj -Resolve)`
         -Configuration $Configuration `
         -ReleaseLabel $ReleaseLabel `
         -BuildNumber $BuildNumber `
