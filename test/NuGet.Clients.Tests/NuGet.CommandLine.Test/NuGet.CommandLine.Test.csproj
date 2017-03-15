@@ -35,12 +35,10 @@
       <Project>{32a23995-14c7-483b-98c3-0ae4185373ea}</Project>
       <Name>NuGet.Credentials</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\NuGet.Clients\SampleCommandLineExtensions\SampleCommandLineExtensions.csproj">
-      <Project>{f2f53b1a-b973-4932-80cb-5eda38f9d74c}</Project>
-      <Name>SampleCommandLineExtensions</Name>
-    </ProjectReference>
 
     <ProjectReference Include="$(NuGetCoreSrcDirectory)\Test.Utility\Test.Utility.csproj" />
+    <ProjectReference Include="..\..\..\test\TestExtensions\TestableCredentialProvider\TestableCredentialProvider.csproj" ReferenceAssemblyOutput="false" />
+    <ProjectReference Include="..\..\..\src\NuGet.Clients\SampleCommandLineExtensions\SampleCommandLineExtensions.csproj" ReferenceAssemblyOutput="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,9 +47,8 @@
   
   <Import Project="$(BuildCommonDirectory)common.targets"/>
 
-  <!-- TODO Reenable this
   <PropertyGroup>
-    <PostBuildEvent>xcopy /diy $(ArtifactRoot)\TestableCredentialProvider\$(OutDirFx). $(TestTargetDir)\TestableCredentialProvider
+    <PostBuildEvent>xcopy /diy $(ArtifactsDirectory)\TestableCredentialProvider\$(OutDirFx). $(TestTargetDir)\TestableCredentialProvider
 xcopy /diy $(ArtifactRoot)\SampleCommandLineExtensions\$(OutDirFx)SampleCommandLineExtensions.dll $(TestTargetDir)</PostBuildEvent>
-  </PropertyGroup> -->
+  </PropertyGroup>
 </Project>
