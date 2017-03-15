@@ -392,9 +392,12 @@ Function Restore-SolutionOrProject {
         $restoreArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
     }    
 
-    if (-not $VerbosePreference) {
-        $restoreArgs += '/v:q'
-    }
+    # if (-not $VerbosePreference) {
+        # $restoreArgs += '/v:q'
+    # }
+    
+    # Testing if this reduces the build time
+    $buildArgs += '/v:q'
 
     Trace-Log ". `"$MSBuildExe`" $restoreArgs"
     & $MSBuildExe $restoreArgs
@@ -450,10 +453,13 @@ Function Build-SolutionOrProject {
     # Parallel build
     # $buildArgs += "/m"
 
-    if (-not $VerbosePreference) {
-        $buildArgs += '/v:m'
-    }
-
+    # if (-not $VerbosePreference) {
+        # $buildArgs += '/v:m'
+    # }
+    
+    # Testing if this reduces the build time
+    $buildArgs += '/v:q'
+    
     Trace-Log ". `"$MSBuildExe`" $buildArgs"
     & $MSBuildExe $buildArgs
     if (-not $?) {
