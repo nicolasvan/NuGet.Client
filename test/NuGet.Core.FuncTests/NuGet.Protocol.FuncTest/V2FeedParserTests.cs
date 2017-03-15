@@ -104,7 +104,7 @@ namespace NuGet.Protocol.FuncTest
             }
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.ProGet)]
         [InlineData(TestServers.Klondike)]
         //[InlineData(TestServers.Artifactory)]
@@ -239,7 +239,7 @@ namespace NuGet.Protocol.FuncTest
             Assert.NotNull(package);
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task V2FeedParser_CredentialNormalizedVersion(string packageSource, string feedName)
@@ -262,7 +262,7 @@ namespace NuGet.Protocol.FuncTest
             Assert.Equal("1.0", package.Version.ToString());
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task V2FeedParser_DownloadFromIdentityFromDifferentCredentialServer(string packageSource, string feedName)
@@ -297,7 +297,7 @@ namespace NuGet.Protocol.FuncTest
             }
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task V2FeedParser_SearchWithPortableFrameworkFromCredentialServer(string packageSource, string feedName)
@@ -326,7 +326,7 @@ namespace NuGet.Protocol.FuncTest
             Assert.Equal("NUnit", package.Id);
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task V2FeedParser_SearchFromCredentialServer(string packageSource, string feedName)
@@ -355,7 +355,7 @@ namespace NuGet.Protocol.FuncTest
             Assert.Equal("NUnit", package.Id);
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task V2FeedParser_SearchWithPrereleaseCredentialServer(string packageSource, string feedName)

@@ -98,7 +98,7 @@ namespace NuGet.Protocol.FuncTest
             }
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task FindPackageByIdResource_Credential(string packageSource, string feedName)
@@ -129,7 +129,7 @@ namespace NuGet.Protocol.FuncTest
             }
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task FindPackageByIdResource_CredentialNoDependencyVersion(string packageSource, string feedName)
@@ -160,7 +160,7 @@ namespace NuGet.Protocol.FuncTest
             }
         }
 
-        [Theory]
+        [FileExistsInNuGetRoamingTheory(Utility.ConfigFileName)]
         [InlineData(TestServers.NuGetServer, "NuGetServer")]
         [InlineData(TestServers.Vsts, "Vsts")]
         public async Task FindPackageByIdResource_CredentialNormalizedVersion(string packageSource, string feedName)
