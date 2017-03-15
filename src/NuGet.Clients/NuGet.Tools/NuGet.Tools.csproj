@@ -190,17 +190,11 @@
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
-  <!--<ItemGroup>
-  <VSCTCompile Include="NuGetTools.vsct">
-      <ResourceName>Menus.ctmenu</ResourceName>
-      <SubType>Designer</SubType>
-    </VSCTCompile>
-      </ItemGroup>-->
-
   <ItemGroup>
     <None Include="Resources\Toolbar.png" />
     <None Include="Resources\nugetAbout.ico" />
     <VSCTCompile Include="NuGetTools.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
     </VSCTCompile>
     <Content Include="Resources\nuget_256.png">
