@@ -137,7 +137,7 @@ namespace NuGet.XPlat.FuncTest
         {
             var dir = ParentDirectoryLookup()
                 .FirstOrDefault(d => DirectoryContains(d, "src"));
-            XPlatTestUtils.WaitForDebugger();
+
             if (dir != null)
             {
                 var xplatDll = Path.Combine(dir.FullName, XPlatBuildRelativePath);
