@@ -17,7 +17,8 @@
     <SharedDirectory>$(RepositoryRootDirectory)Shared</SharedDirectory>
     <NuGetCoreSrcDirectory>$(RepositoryRootDirectory)src\NuGet.Core\</NuGetCoreSrcDirectory>
     <NuGetClientsSrcDirectory>$(RepositoryRootDirectory)src\NuGet.Clients\</NuGetClientsSrcDirectory>
-    <NupkgOutputDirectory>$(ArtifactsDirectory)nupkgs</NupkgOutputDirectory>
+    <NupkgOutputDirectory>$(ArtifactsDirectory)nupkgs\</NupkgOutputDirectory>
+    <SolutionPackagesFolder>$(RepositoryRootDirectory)packages\</SolutionPackagesFolder>
     <EnlistmentRoot>$(RepositoryRootDirectory)</EnlistmentRoot>
     <EnlistmentRootSrc>$(RepositoryRootDirectory)\src</EnlistmentRootSrc>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(RepositoryRootDirectory)</SolutionDir>
