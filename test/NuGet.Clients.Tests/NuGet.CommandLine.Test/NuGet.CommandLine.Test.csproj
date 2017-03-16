@@ -37,8 +37,8 @@
     </ProjectReference>
 
     <ProjectReference Include="$(NuGetCoreSrcDirectory)\Test.Utility\Test.Utility.csproj" />
-    <ProjectReference Include="..\..\..\test\TestExtensions\TestableCredentialProvider\TestableCredentialProvider.csproj" ReferenceAssemblyOutput="false" />
-    <ProjectReference Include="..\..\..\src\NuGet.Clients\SampleCommandLineExtensions\SampleCommandLineExtensions.csproj" ReferenceAssemblyOutput="false" />
+    <ProjectReference Include="..\..\..\test\TestExtensions\TestableCredentialProvider\TestableCredentialProvider.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\..\src\NuGet.Clients\SampleCommandLineExtensions\SampleCommandLineExtensions.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,7 +48,7 @@
   <Import Project="$(BuildCommonDirectory)common.targets"/>
 
   <PropertyGroup>
-    <PostBuildEvent>xcopy /diy $(ArtifactsDirectory)\TestableCredentialProvider\$(OutDirFx). $(TestTargetDir)\TestableCredentialProvider
-xcopy /diy $(ArtifactRoot)\SampleCommandLineExtensions\$(OutDirFx)SampleCommandLineExtensions.dll $(TestTargetDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy /diy $(ArtifactsDirectory)TestableCredentialProvider\$(VisualStudioVersion)\bin\$(Configuration)\net46\TestableCredentialProvider.exe $(OutputPath)TestableCredentialProvider\
+                    xcopy /diy $(ArtifactsDirectory)SampleCommandLineExtensions\$(VisualStudioVersion)\bin\$(Configuration)\net46\SampleCommandLineExtensions.dll $(OutputPath)</PostBuildEvent>
   </PropertyGroup>
 </Project>
