@@ -16,6 +16,7 @@
     <NuGetExePath>$(RepositoryRootDirectory).nuget\nuget.exe</NuGetExePath>
     <SharedDirectory>$(RepositoryRootDirectory)Shared</SharedDirectory>
     <NuGetCoreSrcDirectory>$(RepositoryRootDirectory)src\NuGet.Core\</NuGetCoreSrcDirectory>
+    <NuGetClientsSrcDirectory>$(RepositoryRootDirectory)src\NuGet.Clients\</NuGetClientsSrcDirectory>
     <NupkgOutputDirectory>$(ArtifactsDirectory)nupkgs</NupkgOutputDirectory>
     <EnlistmentRoot>$(RepositoryRootDirectory)</EnlistmentRoot>
     <EnlistmentRootSrc>$(RepositoryRootDirectory)\src</EnlistmentRootSrc>
