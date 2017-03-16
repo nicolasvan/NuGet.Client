@@ -1,0 +1,7 @@
+Configuration that needs to be passed to localize.msbuild
+Configuration="Release"
+Sign="Sign" - do we really need this?
+VSVersion = "14;15;15Ins"
+
+When localize...
+Validate first

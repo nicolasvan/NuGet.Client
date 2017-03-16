@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Default project configuration -->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+  </PropertyGroup>
+
+  <!--Build output setting-->
+  <PropertyGroup>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$([System.IO.Path]::GetFullPath("."))</SolutionDir>
+    <ArtifactRoot>$(SolutionDir)\artifacts</ArtifactRoot>
+  </PropertyGroup>
+
+  <!--<PropertyGroup>
+    <SemanticVersion>4.3.0</SemanticVersion>
+    <PreReleaseVersion>0</PreReleaseVersion>
+  </PropertyGroup>
+
+  -->
+  <PropertyGroup Condition="'$(NuGetVersion)' != ''">
+      <SemanticVersion>$(NuGetVersion)</SemanticVersion>
+  </PropertyGroup>
+
+  <!--Setting the Pre-release/Build meta-data from CI if Version is set-->
+  <PropertyGroup Condition="'$(BuildNumber)' != ''">
+    <PreReleaseVersion>$(BuildNumber)</PreReleaseVersion>
+  </PropertyGroup>
+
+  <!-- Generate AssemblyFileVersion and AssemblyVersion attributes. -->
+  <PropertyGroup>
+    <!-- Turn on dynamic assembly attribute generation -->
+    <AssemblyAttributesPath>$(IntermediateOutputPath)AssemblyInfo.g.cs</AssemblyAttributesPath>
+    <GenerateAdditionalSources>true</GenerateAdditionalSources>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <AssemblyAttributes Include="AssemblyVersion">
+      <_Parameter1>$(SemanticVersion).$(PreReleaseVersion)</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyFileVersion">
+      <_Parameter1>$(SemanticVersion).$(PreReleaseVersion)</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyInformationalVersion">
+      <_Parameter1>$(SemanticVersion)$(PreReleaseVersion)</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyCompany">
+      <_Parameter1>Microsoft Corporation</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyProduct">
+      <_Parameter1>NuGet</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="AssemblyCopyright">
+      <_Parameter1>Microsoft Corporation. All rights reserved.</_Parameter1>
+    </AssemblyAttributes>
+    <AssemblyAttributes Include="System.Resources.NeutralResourcesLanguage">
+      <_Parameter1>en-US</_Parameter1>
+    </AssemblyAttributes>
+  </ItemGroup>-->
+</Project>
