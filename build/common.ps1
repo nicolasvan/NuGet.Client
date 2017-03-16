@@ -682,7 +682,7 @@ Function Restore-TestProjects {
 
 Function Find-Projects([string]$ProjectsLocation) {
     Get-ChildItem $ProjectsLocation -Recurse -Filter '*.csproj' |
-        %{ if(-Not($_.FullName -match "compiler\\resources")) {Split-Path $_.FullName -Parent} }
+        %{ if(-Not($_.FullName -match "compiler\\resources" -or $_.FullName -match "Dotnet.Integration")) {Split-Path $_.FullName -Parent} }
 }
 
 Function Publish-CoreProject {

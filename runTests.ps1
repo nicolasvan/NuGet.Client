@@ -133,29 +133,29 @@ Invoke-BuildStep 'Publishing NuGet.Clients packages - VS15 Toolset' {
     -ev +BuildErrors
     
     
-Invoke-BuildStep 'Running NuGet.Core unit-tests' {
-        Test-Projects `
-        -Configuration $Configuration `
-        -TestType NuGet.Core.Tests
-    } `
-    -skip:($SkipCore -or $SkipUnitTests) `
-    -ev +BuildErrors
+# Invoke-BuildStep 'Running NuGet.Core unit-tests' {
+        # Test-Projects `
+        # -Configuration $Configuration `
+        # -TestType NuGet.Core.Tests
+    # } `
+    # -skip:($SkipCore -or $SkipUnitTests) `
+    # -ev +BuildErrors
 
-Invoke-BuildStep 'Running NuGet.Clients unit-tests - VS15 Toolset' {
-        Test-Projects `
-        -Configuration $Configuration `
-        -TestType NuGet.Client.Tests
-    } `
-    -skip:($SkipVS15 -or $SkipUnitTests) `
-    -ev +BuildErrors
+# Invoke-BuildStep 'Running NuGet.Clients unit-tests - VS15 Toolset' {
+        # Test-Projects `
+        # -Configuration $Configuration `
+        # -TestType NuGet.Client.Tests
+    # } `
+    # -skip:($SkipVS15 -or $SkipUnitTests) `
+    # -ev +BuildErrors
 
-Invoke-BuildStep 'Running NuGet.Clients functional tests - VS15 Toolset' {
-        Test-Projects `
-        -Configuration $Configuration `
-        -TestType NuGet.Client.FuncTests
-    } `
-    -skip:($SkipVS15 -or $SkipFuncTests) `
-    -ev +BuildErrors
+# Invoke-BuildStep 'Running NuGet.Clients functional tests - VS15 Toolset' {
+        # Test-Projects `
+        # -Configuration $Configuration `
+        # -TestType NuGet.Client.FuncTests
+    # } `
+    # -skip:($SkipVS15 -or $SkipFuncTests) `
+    # -ev +BuildErrors
 
 Invoke-BuildStep 'Running NuGet.Core functional tests' {
         Test-Projects `
