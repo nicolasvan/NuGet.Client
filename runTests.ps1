@@ -109,7 +109,7 @@ Invoke-BuildStep 'Cleaning package cache' {
     -skip:(-not $CI) `
     -ev +BuildErrors
 
-& $MSBuildExe NuGet.sln /m:1 /t:rebuild /p:RunTests=true /p:PackProjects=true /p:SkipCoreTests=true /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber
+& $MSBuildExe build\build.proj /t:Test /p:SkipCoreTests=true /p:SkipCoreFuncTests=true /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber
 
 
 # Building the VS15 Tooling solution for tests
