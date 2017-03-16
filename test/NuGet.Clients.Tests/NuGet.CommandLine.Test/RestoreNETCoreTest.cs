@@ -1611,7 +1611,7 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targets = projectA.AssetsFile.Targets.Single().Libraries.ToDictionary(e => e.Name);
+                var targets = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.ToDictionary(e => e.Name);
                 var libs = projectA.AssetsFile.Libraries.ToDictionary(e => e.Name);
 
                 // Verify everything showed up
@@ -1661,7 +1661,7 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetB = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "b");
+                var targetB = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "b");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "b");
 
                 Assert.Equal("1.0.0", targetB.Version.ToNormalizedString());
@@ -1716,7 +1716,7 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetB = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "b");
+                var targetB = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "b");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "b");
 
                 Assert.Equal("1.0.0", targetB.Version.ToNormalizedString());
@@ -1794,8 +1794,8 @@ namespace NuGet.CommandLine.Test
                 var targetB = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("UAP10.0"))).Libraries.SingleOrDefault(e => e.Name == "b");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "b");
 
-                var targetX = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "x");
-                var targetY = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "y");
+                var targetX = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "x");
+                var targetY = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "y");
 
                 Assert.Equal("1.0.0", targetB.Version.ToNormalizedString());
                 Assert.Equal("project", targetB.Type);
@@ -2041,7 +2041,7 @@ namespace NuGet.CommandLine.Test
                 var assetsFile = projectA.AssetsFile;
 
                 // Find all non _._ compile assets
-                var flowingCompile = assetsFile.Targets.Single().Libraries
+                var flowingCompile = assetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
                     .Where(e => e.CompileTimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
                     .Select(e => e.Name)
@@ -2050,7 +2050,7 @@ namespace NuGet.CommandLine.Test
                 Assert.Equal("bcde", string.Join("", flowingCompile));
 
                 // Runtime should always flow
-                var flowingRuntime = assetsFile.Targets.Single().Libraries
+                var flowingRuntime = assetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
                     .Where(e => e.RuntimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
                     .Select(e => e.Name)
@@ -2154,7 +2154,7 @@ namespace NuGet.CommandLine.Test
                 var assetsFile = projectA.AssetsFile;
 
                 // Find all non _._ compile assets
-                var flowingCompile = assetsFile.Targets.Single().Libraries
+                var flowingCompile = assetsFile.Targets.Single(e => string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
                     .Where(e => e.CompileTimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
                     .Select(e => e.Name)
@@ -2163,7 +2163,7 @@ namespace NuGet.CommandLine.Test
                 Assert.Equal("b", string.Join("", flowingCompile));
 
                 // Runtime should always flow
-                var flowingRuntime = assetsFile.Targets.Single().Libraries
+                var flowingRuntime = assetsFile.Targets.Single(e => string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries
                     .Where(e => e.Type == "project")
                     .Where(e => e.RuntimeAssemblies.Where(f => !f.Path.EndsWith("_._")).Any())
                     .Select(e => e.Name)
@@ -2229,7 +2229,7 @@ namespace NuGet.CommandLine.Test
                 Assert.True(0 == r.Item1, r.Item2 + " " + r.Item3);
 
                 // Assert
-                var targetB = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("NETCoreApp1.0"))).Libraries.SingleOrDefault(e => e.Name == "b");
+                var targetB = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("NETCoreApp1.0")) && string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "b");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "b");
 
                 Assert.Equal("1.0.0", targetB.Version.ToNormalizedString());
@@ -2325,10 +2325,10 @@ namespace NuGet.CommandLine.Test
                 Assert.True(0 == r.Item1, r.Item2 + " " + r.Item3);
 
                 // Assert
-                var targetB = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("NETCoreApp1.0"))).Libraries.SingleOrDefault(e => e.Name == "b");
+                var targetB = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("NETCoreApp1.0")) && string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "b");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "b");
 
-                var targetC = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("NETCoreApp1.0"))).Libraries.SingleOrDefault(e => e.Name == "c");
+                var targetC = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("NETCoreApp1.0")) && string.IsNullOrEmpty(e.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "c");
                 var libC = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "c");
 
                 var dDep = targetC.Dependencies.Single();
@@ -2555,7 +2555,7 @@ namespace NuGet.CommandLine.Test
 
                 // Act
                 var r = RestoreSolution(pathContext);
-                var xTarget = projectA.AssetsFile.Targets.Single().Libraries.Single();
+                var xTarget = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.Single();
 
                 // Assert
                 Assert.Equal("lib/dnxcore50/a.dll", xTarget.CompileTimeAssemblies.Single());
@@ -2599,7 +2599,7 @@ namespace NuGet.CommandLine.Test
 
                 // Act
                 var r = RestoreSolution(pathContext);
-                var xTarget = projectA.AssetsFile.Targets.Single().Libraries.Single();
+                var xTarget = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.Single();
 
                 // Assert
                 Assert.Equal("lib/dnxcore50/a.dll", xTarget.CompileTimeAssemblies.Single());
@@ -2649,7 +2649,7 @@ namespace NuGet.CommandLine.Test
                 Assert.True(File.Exists(projectA.TargetsOutput), r.Item2);
                 Assert.True(File.Exists(projectA.PropsOutput), r.Item2);
 
-                Assert.Equal(NuGetFramework.Parse("net45"), projectA.AssetsFile.Targets.Single().TargetFramework);
+                Assert.Equal(NuGetFramework.Parse("net45"), projectA.AssetsFile.Targets.Single(e => string.IsNullOrEmpty(e.RuntimeIdentifier)).TargetFramework);
             }
         }
 
@@ -2706,7 +2706,7 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetB = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "b");
+                var targetB = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "b");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "b");
 
                 Assert.Equal("1.0.0", targetB.Version.ToNormalizedString());
@@ -2754,7 +2754,7 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetB = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "y");
+                var targetB = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "y");
                 var libB = projectA.AssetsFile.Libraries.SingleOrDefault(e => e.Name == "y");
 
                 Assert.Equal("1.0.0", targetB.Version.ToNormalizedString());
@@ -2851,7 +2851,7 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetX = projectA.AssetsFile.Targets.Single().Libraries.SingleOrDefault(e => e.Name == "x");
+                var targetX = projectA.AssetsFile.Targets.Single(target => string.IsNullOrEmpty(target.RuntimeIdentifier)).Libraries.SingleOrDefault(e => e.Name == "x");
 
                 Assert.Equal("1.0.0", targetX.Version.ToNormalizedString());
             }
@@ -2913,8 +2913,8 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetNet = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("net46")));
-                var targetNS = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("netstandard1.6")));
+                var targetNet = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("net46")) && string.IsNullOrEmpty(e.RuntimeIdentifier));
+                var targetNS = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("netstandard1.6")) && string.IsNullOrEmpty(e.RuntimeIdentifier));
 
                 Assert.Equal("x", targetNet.Libraries.Single(e => e.Type == "package").Name);
                 Assert.Equal("y", targetNS.Libraries.Single(e => e.Type == "package").Name);
@@ -2976,8 +2976,8 @@ namespace NuGet.CommandLine.Test
                 var r = RestoreSolution(pathContext);
 
                 // Assert
-                var targetNet = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("net46")));
-                var targetNS = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("netstandard1.6")));
+                var targetNet = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("net46")) && string.IsNullOrEmpty(e.RuntimeIdentifier));
+                var targetNS = projectA.AssetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("netstandard1.6"))  && string.IsNullOrEmpty(e.RuntimeIdentifier));
 
                 Assert.Equal("x", targetNet.Libraries.Single(e => e.Type == "package").Name);
                 Assert.Equal("x", targetNS.Libraries.Single(e => e.Type == "package").Name);
