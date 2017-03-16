@@ -21,8 +21,8 @@
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.0.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.0.1" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.1.1" />
-    <PackageReference Include="Microsoft.Build.Runtime" Version="15.1.0-preview-000370-00" />
+    <PackageReference Include="Microsoft.Build.Runtime" Version="15.1.548" />
   </ItemGroup>
   
-  <Import Project="$(BuildCommonDirectory)common.targets"/>
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 </Project>
