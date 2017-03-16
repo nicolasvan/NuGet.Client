@@ -51,10 +51,12 @@
     </None>
   </ItemGroup>
   
-  <Import Project="$(BuildCommonDirectory)common.targets"/>
+  <Import Project="$(BuildCommonDirectory)common.targets" />
 
   <PropertyGroup>
-    <PostBuildEvent>xcopy /diy $(ArtifactsDirectory)TestableCredentialProvider\$(VisualStudioVersion)\bin\$(Configuration)\net46\TestableCredentialProvider.exe $(OutputPath)TestableCredentialProvider\
-                    xcopy /diy $(ArtifactsDirectory)SampleCommandLineExtensions\$(VisualStudioVersion)\bin\$(Configuration)\net46\SampleCommandLineExtensions.dll $(OutputPath)</PostBuildEvent>
+    <PostBuildEvent>
+      xcopy /diy $(ArtifactsDirectory)TestableCredentialProvider\$(VisualStudioVersion)\bin\$(Configuration)\net46\CredentialProvider.Testable.exe $(OutputPath)TestableCredentialProvider\
+      xcopy /diy $(ArtifactsDirectory)TestableCredentialProvider\$(VisualStudioVersion)\bin\$(Configuration)\net46\*.dll $(OutputPath)TestableCredentialProvider\
+      xcopy /diy $(ArtifactsDirectory)SampleCommandLineExtensions\$(VisualStudioVersion)\bin\$(Configuration)\net46\SampleCommandLineExtensions.dll $(OutputPath)</PostBuildEvent>
   </PropertyGroup>
 </Project>
