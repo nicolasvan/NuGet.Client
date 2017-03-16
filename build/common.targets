@@ -2,10 +2,12 @@
   <!-- Compiler flags -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net46' ">
     <DefineConstants>$(DefineConstants);IS_DESKTOP</DefineConstants>
+    <IsDesktop>true</IsDesktop>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' OR '$(TargetFramework)' == 'netcoreapp1.1' OR'$(TargetFramework)' == 'netstandard1.0' OR '$(TargetFramework)' == 'netstandard1.3' OR '$(TargetFramework)' == 'netstandard1.4' OR '$(TargetFramework)' == 'netstandard1.5' OR '$(TargetFramework)' == 'netstandard1.6' ">
     <DefineConstants>$(DefineConstants);IS_CORECLR</DefineConstants>
+    <IsCore>true</IsCore>
   </PropertyGroup>
 
   <!-- Include shared files for netcore projects -->
@@ -22,7 +24,12 @@
   <!-- Avoid writing these out for other scenarios such as tests. -->
   <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' ">
     <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' ">true</GenerateDocumentationFile>
-    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' ">$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <!--
+    <GenerateDocumentationFile Condition=" '$(IsNetCoreProject)' == 'true' AND '$(TargetFramework)' == ''  ">false</GenerateDocumentationFile>
+    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' ">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' AND '$(IsNetCoreProject)' == 'true' ">$(OutputPath)$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <DocumentationFile Condition=" '$(IsNetCoreProject)' == 'true' AND '$(TargetFramework)' == ''  "></DocumentationFile>
+    -->
   </PropertyGroup>
 
   <!-- These are needed because currently a VSIX project cannot reference a net core project that multi targets -->
@@ -73,4 +80,30 @@
 
     <Message Text="Created nupkg for $(ProjectName)" Importance="high" />
   </Target>
+
+  <!--
+    ============================================================
+    RunTests
+    ============================================================
+  -->
+  <Target Name="RunTests"
+          AfterTargets="Build;Rebuild"
+          Condition=" '$(SkipTests)' != 'true' AND '$(RunTests)' == 'true' AND '$(TargetFramework)' != '' AND '$(TestProject)' == 'true' ">
+    
+    <PropertyGroup>
+      <TestAssemblyPath>$(OutputPath)$(AssemblyName).exe</TestAssemblyPath>
+    </PropertyGroup>
+
+    <Message Text="Running tests on $(TestAssemblyPath)" Importance="high" />
+    
+    <!-- For desktop frameworks use the msbuild runner -->
+    <xunit Assemblies="$(TestAssemblyPath)"
+           DiagnosticMessages="true"
+           Reporter="verbose"
+           Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
+
+    <!-- For other frameworks call dotnet test -->
+    <Exec Command="$(DotnetExePath) test -f $(TargetFramework) --no-build" Condition=" '$(IsDesktop)' != 'true' AND '$(SkipCoreTests)' != 'true' " />
+  </Target>
+
 </Project>

@@ -4111,7 +4111,7 @@ stuff \n &lt;&lt;
                 var r = CommandRunner.Run(
                     nugetexe,
                     workingDirectory,
-                    "pack packageA.nuspec",
+                    "pack packageA.nuspec -verbosity detailed",
                     waitForExit: true);
                 Assert.True(0 == r.Item1, r.Item2 + " " + r.Item3);
 
