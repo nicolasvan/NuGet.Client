@@ -1,0 +1,68 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Run">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
+
+  <!-- Configuration/global properties -->
+  <PropertyGroup>
+    <CommonMSBuildProperties>
+      Configuration=Release;
+      ReleaseLabel=$(ReleaseLabel);
+      BuildNumber=$(BuildNumber);
+    </CommonMSBuildProperties>
+  </PropertyGroup>
+
+  <!-- Find all test projects  -->
+  <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
+    <CoreUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\*\*.csproj" />
+    <CoreFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.FuncTests\*\*.csproj" />
+    <ClientUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.Tests\*\*.csproj" />
+    <ClientFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.FuncTests\*\*.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AllTestProjects Include="@(CoreUnitTestProjects)" Condition=" '$(SkipCoreUnitTests)' != 'true' " />
+    <AllTestProjects Include="@(CoreFuncTestProjects)" Condition=" '$(SkipCoreFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
+    <AllTestProjects Include="@(ClientUnitTestProjects)" Condition=" '$(SkipClientUnitTests)' != 'true' AND '$(FastTests)' != 'true' " />
+    <AllTestProjects Include="@(ClientFuncTestProjects)" Condition=" '$(SkipClientFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
+  </ItemGroup>
+
+  <!--
+    ============================================================
+    Run full build.
+    ============================================================
+  -->
+  <Target Name="Run" DependsOnTargets="Clean;Build;Test;Pack">
+  </Target>
+
+
+  <!--
+    ============================================================
+    Test all projects in the solution.
+    ============================================================
+  -->
+  <Target Name="RestoreTests" Condition=" '$(SkipTest)' != 'true' ">
+    <Message Text="$(CommonMSBuildProperties)" Importance="high" />
+    
+    <MSBuild BuildInParallel="false"
+             Projects="$(SolutionFile)"
+             Targets="Restore"
+             Properties="$(CommonMSBuildProperties)" />
+  </Target>
+
+
+  <!--
+    ============================================================
+    Test all projects in the solution.
+    ============================================================
+  -->
+  <Target Name="Test" Condition=" '$(SkipTest)' != 'true' ">
+    <Message Text="$(AllTestProjects)" Importance="high" />
+    
+    <MSBuild BuildInParallel="false"
+             Projects="@(ClientFuncTestProjects)"
+             Targets="Rebuild"
+             Properties="$(CommonMSBuildProperties);
+             RunTests=true;
+             PackProjects=true;
+             VisualStudioVersion=15.0;" />
+  </Target>
+</Project>

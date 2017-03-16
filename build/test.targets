@@ -3,7 +3,7 @@
   <!-- Shared test project template -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition=" '$(IsXPlat)' != 'true' ">win7-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,6 +17,10 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)" />
     <PackageReference Include="xunit" Version="$(XunitVersion)" />
     <PackageReference Include="Moq" Version="$(MoqVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(IsDesktop)' == 'true' ">
+    <PackageReference Include="xunit.runner.msbuild" Version="$(XunitVersion)" />
   </ItemGroup>
 
   <!-- Workaround for test projects not automatically creating binding redirects -->

@@ -299,7 +299,8 @@ Function Build-Solution {
         [ValidateSet(14, 15)]
         [int]$ToolsetVersion = $DefaultMSBuildVersion,
         [switch]$SkipRestore,
-        [switch]$Rebuild
+        [switch]$Rebuild,
+        [hashtable]$Parameters
     )
 
     $solutionPath = Join-Path $NuGetClientRoot NuGet.sln -Resolve
@@ -311,6 +312,7 @@ Function Build-Solution {
         -ReleaseLabel $ReleaseLabel `
         -BuildNumber $BuildNumber `
         -ToolsetVersion $ToolsetVersion `
+        -Parameters $Parameters `
         -IsSolution `
         -Rebuild
         
@@ -346,7 +348,8 @@ Function Build-ClientsProjectHelper {
         -BuildNumber $BuildNumber `
         -ToolsetVersion $ToolsetVersion `
         -IsSolution `
-        -Rebuild
+        -Rebuild `
+        -Parameters $Parameters `
 }
 
 
