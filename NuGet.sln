@@ -202,6 +202,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestExtensions", "TestExten
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestableCredentialProvider", "test\TestExtensions\TestablePluginCredentialProvider\TestableCredentialProvider.csproj", "{E901BDC7-CB84-40FA-A2C0-03DB4F9AEA3C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.Test", "test\TestExtensions\API.Test\API.Test.csproj", "{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestableVSCredentialProvider", "test\TestExtensions\TestableVSCredentialProvider\TestableVSCredentialProvider.csproj", "{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateTestPackages", "test\TestExtensions\GenerateTestPackages\GenerateTestPackages.csproj", "{CC657FF4-F66E-4A28-9165-AF112A93EE89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -673,6 +679,24 @@ Global
 		{E901BDC7-CB84-40FA-A2C0-03DB4F9AEA3C}.Mono Release|Any CPU.Build.0 = Mono Release|Any CPU
 		{E901BDC7-CB84-40FA-A2C0-03DB4F9AEA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E901BDC7-CB84-40FA-A2C0-03DB4F9AEA3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}.Mono Release|Any CPU.ActiveCfg = Mono Release|Any CPU
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}.Mono Release|Any CPU.Build.0 = Mono Release|Any CPU
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}.Mono Release|Any CPU.ActiveCfg = Mono Release|Any CPU
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}.Mono Release|Any CPU.Build.0 = Mono Release|Any CPU
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89}.Mono Release|Any CPU.ActiveCfg = Mono Release|Any CPU
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89}.Mono Release|Any CPU.Build.0 = Mono Release|Any CPU
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -768,5 +792,8 @@ Global
 		{30D3D653-C936-40DD-B044-329980E156ED} = {01BC4531-1E25-48D7-A8FD-A47D6FEC47FB}
 		{23CEFC88-9365-4464-A517-700224ECA033} = {D1549653-9631-4E16-9967-55427174A0DC}
 		{E901BDC7-CB84-40FA-A2C0-03DB4F9AEA3C} = {23CEFC88-9365-4464-A517-700224ECA033}
+		{90AEABA2-0FB5-4D6C-A505-FA7F9ED38076} = {23CEFC88-9365-4464-A517-700224ECA033}
+		{7D0DDCB8-E362-4283-8AC8-3FF1E9B0263E} = {23CEFC88-9365-4464-A517-700224ECA033}
+		{CC657FF4-F66E-4A28-9165-AF112A93EE89} = {23CEFC88-9365-4464-A517-700224ECA033}
 	EndGlobalSection
 EndGlobal
