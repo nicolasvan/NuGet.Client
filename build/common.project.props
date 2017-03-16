@@ -120,7 +120,7 @@
     <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
     <AppxPackageDir>$(OutputPath)</AppxPackageDir>
   </PropertyGroup>
-
+  
   <!-- Generate AssemblyFileVersion and AssemblyVersion attributes. -->
   <PropertyGroup>
     <!-- Turn on dynamic assembly attribute generation -->
