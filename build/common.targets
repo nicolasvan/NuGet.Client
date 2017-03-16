@@ -20,7 +20,7 @@
 
   <!-- Write out .XML files for projects that will be packed. -->
   <!-- Avoid writing these out for other scenarios such as tests. -->
-  <PropertyGroup Condition=" '$(PackProject)' == 'true' ">
+  <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' ">
     <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' ">true</GenerateDocumentationFile>
     <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' ">$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
