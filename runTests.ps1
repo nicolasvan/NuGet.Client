@@ -149,6 +149,14 @@ Invoke-BuildStep 'Running NuGet.Clients unit-tests - VS15 Toolset' {
     -skip:($SkipVS15 -or $SkipUnitTests) `
     -ev +BuildErrors
 
+Invoke-BuildStep 'Running NuGet.Clients functional tests - VS15 Toolset' {
+        Test-Projects `
+        -Configuration $Configuration `
+        -TestType NuGet.Client.FuncTests
+    } `
+    -skip:($SkipVS15 -or $SkipFuncTests) `
+    -ev +BuildErrors
+
 Invoke-BuildStep 'Running NuGet.Core functional tests' {
         Test-Projects `
         -Configuration $Configuration `
@@ -156,41 +164,6 @@ Invoke-BuildStep 'Running NuGet.Core functional tests' {
     } `
     -skip:($SkipCore -or $SkipFuncTests) `
     -ev +BuildErrors
-
-# Invoke-BuildStep 'Running NuGet.Clients func-tests - VS14 Toolset' {
-        # Test-FuncClientProjects $Configuration NuGet.Client.FuncTests
-    # } `
-    # -skip:($SkipVS14 -or $SkipFuncTests) `
-    # -ev +BuildErrors
-    
-# Invoke-BuildStep 'Running NuGet.Clients unit-tests - VS14 Toolset' {
-        # Test-ClientsProjects $Configuration -ToolsetVersion 14 -CI:$CI
-    # } `
-    # -skip:($SkipVS14 -or $SkipUnitTests) `
-    # -ev +BuildErrors
-
-# Invoke-BuildStep 'Running NuGet.Clients functional tests - VS14 Toolset' {
-        # Test-FuncClientsProjects $Configuration -ToolsetVersion 14 -CI:$CI
-    # } `
-    # -skip:($SkipVS14 -or $SkipFuncTests) `
-    # -ev +BuildErrors
-
-
-
-
-# Invoke-BuildStep 'Running NuGet.Clients tests - VS15 Toolset' {
-        # # We don't run command line tests on VS15 as we don't build a nuget.exe for this version
-        # Test-ClientsProjects $Configuration -ToolsetVersion 15 -SkipProjects 'NuGet.CommandLine.Test' -CI:$CI
-    # } `
-    # -skip:($SkipVS15 -or $SkipUnitTests) `
-    # -ev +BuildErrors
-
-# Invoke-BuildStep 'Running NuGet.Clients functional tests - VS15 Toolset' {
-        # # We don't run command line tests on VS15 as we don't build a nuget.exe for this version
-        # Test-FuncClientsProjects $Configuration -ToolsetVersion 15 -SkipProjects 'NuGet.CommandLine.FuncTest' -CI:$CI
-    # } `
-    # -skip:($SkipVS15 -or $SkipFuncTests) `
-    # -ev +BuildErrors
 
 Invoke-BuildStep 'Cleaning package cache' {
         Clear-PackageCache
