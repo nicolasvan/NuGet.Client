@@ -24,6 +24,7 @@
   <!-- Avoid writing these out for other scenarios such as tests. -->
   <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' ">
     <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' ">true</GenerateDocumentationFile>
+    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' AND '$(IsNetCoreProject)' != 'true' ">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
     <!--
     <GenerateDocumentationFile Condition=" '$(IsNetCoreProject)' == 'true' AND '$(TargetFramework)' == ''  ">false</GenerateDocumentationFile>
     <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' ">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
