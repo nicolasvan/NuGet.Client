@@ -109,6 +109,8 @@ Invoke-BuildStep 'Cleaning package cache' {
     -skip:(-not $CI) `
     -ev +BuildErrors
 
+& $MSBuildExe build\build.proj /t:RestoreTests /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber
+
 & $MSBuildExe build\build.proj /t:Test /p:SkipCoreTests=true /p:SkipCoreFuncTests=true /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber
 
 
