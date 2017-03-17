@@ -45,7 +45,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.12.0" Version="12.0.30110" />
     <PackageReference Version="8.0.50727" Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
     <PackageReference Version="9.0.30729" Include="Microsoft.VisualStudio.Shell.Interop.9.0" />
-    <PackageReference Version="4.0.0-*" Include="NuGet.Protocol.VisualStudio" />
     <PackageReference Include="VSSDK.TemplateWizardInterface" Version="12.0.4" />
   </ItemGroup>
 

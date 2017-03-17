@@ -18,6 +18,11 @@
     <ClientFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.FuncTests\*\*.csproj" />
   </ItemGroup>
 
+  <!-- start with only nuget.versioning for xplat -->
+  <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
+    <CoreUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Versioning\*.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <AllTestProjects Include="@(CoreUnitTestProjects)" Condition=" '$(SkipCoreUnitTests)' != 'true' " />
     <AllTestProjects Include="@(CoreFuncTestProjects)" Condition=" '$(SkipCoreFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
