@@ -19,8 +19,13 @@
   </ItemGroup>
 
   <!-- start with only nuget.versioning for xplat -->
-  <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
-    <CoreUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Versioning\*.csproj" />
+  <ItemGroup Condition=" '$(IsXPlat)' == 'true' ">
+    <CoreUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\*\*.csproj"
+                          Exclude="$(RepositoryRootDirectory)test\NuGet.Core.Tests\*PackageManagement*\*.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\*ProjectManagement*\*.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\*VisualStudio*\*.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\*.Utility\*.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Indexing.Test\*.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +33,15 @@
     <AllTestProjects Include="@(CoreFuncTestProjects)" Condition=" '$(SkipCoreFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
     <AllTestProjects Include="@(ClientUnitTestProjects)" Condition=" '$(SkipClientUnitTests)' != 'true' AND '$(FastTests)' != 'true' " />
     <AllTestProjects Include="@(ClientFuncTestProjects)" Condition=" '$(SkipClientFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
+    <SolutionProject Include="$(RepositoryRootDirectory)test\*\*\*.csproj" Exclude="$(RepositoryRootDirectory)test\EndToEnd\*\*.csproj" />
+    <SolutionProject Include="$(RepositoryRootDirectory)src\*\*\*.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(IsXPlat)' == 'true' ">
+    <SolutionProject Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Versioning.Test\*.csproj" />
   </ItemGroup>
 
   <!--
@@ -63,11 +77,35 @@
     <Message Text="$(AllTestProjects)" Importance="high" />
     
     <MSBuild BuildInParallel="false"
-             Projects="@(ClientFuncTestProjects)"
+             Projects="@(AllTestProjects)"
              Targets="Rebuild"
              Properties="$(CommonMSBuildProperties);
              RunTests=true;
              PackProjects=true;
              VisualStudioVersion=15.0;" />
   </Target>
+
+  <!--
+    ============================================================
+    Restore all projects for the current platform.
+    ============================================================
+  -->
+  <Target Name="Restore">
+
+    <!-- Convert list of projects to a property -->
+    <PropertyGroup>
+      <ProjectListValue>@(SolutionProject)</ProjectListValue>
+    </PropertyGroup>
+
+    <MSBuild
+      Projects="restorehelper.targets"
+      Targets="Restore"
+      Properties="RestoreGraphProjectInput=$(ProjectListValue);
+                  %(_MSBuildProjectReferenceExistent.SetConfiguration);
+                  %(_MSBuildProjectReferenceExistent.SetPlatform)"
+      RemoveProperties="%(_MSBuildProjectReferenceExistent.GlobalPropertiesToRemove)">
+    </MSBuild>
+  </Target>
+
+
 </Project>

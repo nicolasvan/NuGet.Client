@@ -104,7 +104,7 @@
            Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
 
     <!-- For other frameworks call dotnet test -->
-    <Exec Command="$(DotnetExePath) test -f $(TargetFramework) --no-build" Condition=" '$(IsDesktop)' != 'true' AND '$(SkipCoreTests)' != 'true' " />
+    <Exec Command="$(DotnetExePath) test -f $(TargetFramework) --no-build -c $(Configuration)" Condition=" '$(IsDesktop)' != 'true' AND '$(SkipCoreTests)' != 'true' " />
   </Target>
 
 </Project>
