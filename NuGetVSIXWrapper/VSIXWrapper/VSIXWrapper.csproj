@@ -31,7 +31,7 @@
     <VSSDKTargetPlatformRegRootSuffix>Exp</VSSDKTargetPlatformRegRootSuffix>
   </PropertyGroup>
   <PropertyGroup>
-    <VsixOutputDirName>VSIX</VsixOutputDirName>
+    <VsixOutputDirName></VsixOutputDirName>
     <IsProductComponent>true</IsProductComponent>
     <ExtensionInstallationRoot>CommonExtensions</ExtensionInstallationRoot>
     <ExtensionInstallationFolder>Microsoft\NuGet</ExtensionInstallationFolder>
