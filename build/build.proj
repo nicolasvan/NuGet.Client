@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="15.0" DefaultTargets="Run">
+﻿<Project ToolsVersion="15.0" DefaultTargets="Test">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'common.props'))\common.props" />
 
   <!-- Configuration/global properties -->
@@ -43,30 +43,6 @@
   <ItemGroup Condition=" '$(IsXPlat)' == 'true' ">
     <SolutionProject Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Versioning.Test\*.csproj" />
   </ItemGroup>
-
-  <!--
-    ============================================================
-    Run full build.
-    ============================================================
-  -->
-  <Target Name="Run" DependsOnTargets="Clean;Build;Test;Pack">
-  </Target>
-
-
-  <!--
-    ============================================================
-    Test all projects in the solution.
-    ============================================================
-  -->
-  <Target Name="RestoreTests" Condition=" '$(SkipTest)' != 'true' ">
-    <Message Text="$(CommonMSBuildProperties)" Importance="high" />
-    
-    <MSBuild BuildInParallel="false"
-             Projects="$(SolutionFile)"
-             Targets="Restore"
-             Properties="$(CommonMSBuildProperties)" />
-  </Target>
-
 
   <!--
     ============================================================

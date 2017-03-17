@@ -7,6 +7,7 @@
 
   <!-- Import the existing NuGet targets file -->
   <Import Project="$(MSBuildExtensionsPath)/NuGet.targets" Condition=" '$(IsXPlat)' == 'true' " />
+  <Import Project="$(MSBuildExtensionsPath)\..\Common7\IDE\CommonExtensions\Microsoft\NuGet\NuGet.targets" Condition=" '$(IsXPlat)' != 'true' " />
   
   <Target Name="_SplitProjectReferencesByFileExistence">
   	<!-- Noop -->
