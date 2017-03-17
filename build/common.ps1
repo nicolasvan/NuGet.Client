@@ -395,12 +395,9 @@ Function Restore-SolutionOrProject {
         $restoreArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
     }    
 
-    # if (-not $VerbosePreference) {
-        # $restoreArgs += '/v:q'
-    # }
-    
-    # Testing if this reduces the build time
-    $buildArgs += '/v:q'
+    if (-not $VerbosePreference) {
+        $restoreArgs += '/v:q'
+    }
 
     Trace-Log ". `"$MSBuildExe`" $restoreArgs"
     & $MSBuildExe $restoreArgs
@@ -456,12 +453,9 @@ Function Build-SolutionOrProject {
     # Parallel build
     # $buildArgs += "/m"
 
-    # if (-not $VerbosePreference) {
-        # $buildArgs += '/v:m'
-    # }
-    
-    # Testing if this reduces the build time
-    $buildArgs += '/v:q'
+    if (-not $VerbosePreference) {
+        $buildArgs += '/v:m'
+    }
     
     Trace-Log ". `"$MSBuildExe`" $buildArgs"
     & $MSBuildExe $buildArgs
@@ -469,6 +463,104 @@ Function Build-SolutionOrProject {
         Error-Log "Build of $SolutionOrProject failed. Code: $LASTEXITCODE"
     }
 }
+
+
+Function Restore-BuildProj {
+    param(
+        [string]$Configuration = $DefaultConfiguration,
+        [string]$ReleaseLabel = $DefaultReleaseLabel,
+        [int]$BuildNumber = (Get-BuildNumber),
+        [ValidateSet(14,15)]
+        [int]$ToolsetVersion = $DefaultMSBuildVersion,
+        [hashtable]$Parameters
+    )
+
+    $restoreArgs = , $SolutionOrProject
+
+    $restoreArgs += "/t:Restore"
+
+    #if ($IsSolution -And $ToolsetVersion -eq 14) {
+    #    $restoreArgs += "/p:Configuration=$Configuration VS14"
+    #}
+    #else {
+    #    $restoreArgs += "/p:Configuration=$Configuration"
+    #}
+
+    $restoreArgs += "/p:Configuration=$Configuration"
+    
+    if ($ReleaseLabel) {
+        $restoreArgs += "/p:ReleaseLabel=$ReleaseLabel"
+    }
+    if ($BuildNumber) {
+        $restoreArgs += "/p:BuildNumber=$(Format-BuildNumber $BuildNumber)"
+    }
+    if ($ExcludeBuildNumber) {
+        $restoreArgs += "/p:ExcludeBuildNumber=true"
+    }
+    foreach($key in $Parameters.keys) {
+        $restoreArgs +="/p:$key=" + $Parameters[$key]
+    }
+    if ($ToolsetVersion) {
+        $restoreArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
+    }    
+
+    if (-not $VerbosePreference) {
+        $restoreArgs += '/v:q'
+    }
+
+    Trace-Log ". `"$MSBuildExe`" $restoreArgs"
+    & $MSBuildExe build\build.proj $restoreArgs
+    if (-not $?) {
+        Error-Log "Restore of $SolutionOrProject failed. Code: $LASTEXITCODE"
+    }
+}
+
+
+Function Test-BuildProj {
+    param(
+        [string]$Configuration = $DefaultConfiguration,
+        [string]$ReleaseLabel = $DefaultReleaseLabel,
+        [int]$BuildNumber = (Get-BuildNumber),
+        [ValidateSet(14,15)]
+        [int]$ToolsetVersion = $DefaultMSBuildVersion,
+        [hashtable]$Parameters
+    )
+
+    $testArgs = , $SolutionOrProject
+
+    #if ($IsSolution -And $ToolsetVersion -eq 14) {
+    #    $testArgs += "/p:Configuration=$Configuration VS14"
+    #}
+    #else {
+    #    $testArgs += "/p:Configuration=$Configuration"
+    #}
+
+    $testArgs += "/p:Configuration=$Configuration"
+    $testArgs += "/p:ReleaseLabel=$ReleaseLabel"
+    $testArgs += "/p:BuildNumber=$(Format-BuildNumber $BuildNumber)"
+
+    foreach($key in $Parameters.keys) {
+        $testArgs +="/p:$key=" + $Parameters[$key]
+    }
+
+    $testArgs += "/p:VisualStudioVersion=${ToolsetVersion}.0"
+
+    $testArgs += "/p:PackProjects=true"
+
+    # Parallel build
+    # $testArgs += "/m"
+
+    if (-not $VerbosePreference) {
+        $testArgs += '/v:m'
+    }
+    
+    Trace-Log ". `"$MSBuildExe`" $testArgs"
+    & $MSBuildExe build\build.proj $testArgs
+    if (-not $?) {
+        Error-Log "Build of $SolutionOrProject failed. Code: $LASTEXITCODE"
+    }
+}
+
 
 
 Function Test-BuildEnvironment {
