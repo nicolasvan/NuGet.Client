@@ -1,0 +1,32 @@
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="NuGet.settings.targets" />
+  <ItemGroup>
+  <_CopyItems Include="$(NuGetToolsIntermediateOutputPath)**\*.*"/>
+    </ItemGroup>
+<!--    <Exec Command="rm manifest.json components.json [Content_Types].xml" WorkingDirectory="$(VSIXWrapperDropPath)"/>-->
+<!---->
+    <PropertyGroup>
+    <NuGetVSVersion>15</NuGetVSVersion>
+    </PropertyGroup>
+    <Target Name="BuildVSIX">
+        <Message Text="The value is $(NuGetVSVersion) and $(RebuildVSIX)"/>
+
+        <!--<Message Text="We're not rebuilding the VSIX" Condition="'$(RebuildVSIX)'!='rebuild'"/>-->
+
+        <CallTarget Targets="CreateVSIX" Condition="('$(NuGetVSVersion)' == '15' Or '$(NuGetVSVersion)' == '15Ins') And '$(RebuildVSIX)' == 'rebuild' "/>
+        <CallTarget Targets="CreateVSIX2" Condition="('$(NuGetVSVersion)' != '15' And '$(NuGetVSVersion)' != '15Ins') Or '$(RebuildVSIX)' != 'rebuild'"/>
+    </Target>
+
+  <Target Name="CreateVSIX" Condition="'$(NuGetVSVersion)' == '15' Or '$(NuGetVSVersion)' == '15Ins'" >
+    <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(VSIXWrapperDropPath)"/>
+    <Exec Command="$(NuGetToolsPath)NuGet.exe restore $(VSIXWrapperSln)" WorkingDirectory="$(VSIXWrapperSlnPath)"/>
+    <Exec Command="MSBuild /t:build /p:Configuration=$(Configuration) $(VSIXWrapperSln)" WorkingDirectory="$(VSIXWrapperSlnPath)"/>
+    <Copy SourceFiles="$(VSIXWrapperArtifactsFolder)NuGet.Tools.vsix" DestinationFiles="$(NuGetVSIXOutputPath)\NuGet.Tools.vsix" />
+    <Copy SourceFiles="$(VSIXWrapperArtifactsFolder)Microsoft.VisualStudio.NuGet.Core.json" DestinationFiles="$(NuGetVSIXOutputPath)\Microsoft.VisualStudio.NuGet.Core.json" />    
+  </Target>
+
+  <Target Name="CreateVSIX2">
+    <Message Text="Good you should come here when the version is not correct"/>
+  </Target>
+
+</Project>
