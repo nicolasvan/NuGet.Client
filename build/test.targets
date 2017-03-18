@@ -23,6 +23,10 @@
     <PackageReference Include="xunit.runner.msbuild" Version="$(XunitVersion)" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <TestResultsDirectory>$(ArtifactsDirectory)TestResults\</TestResultsDirectory>
+  </PropertyGroup>
+
   <!-- Workaround for test projects not automatically creating binding redirects -->
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

@@ -144,7 +144,7 @@
     Build, Pack, Unit tests for VS 14
     ============================================================
   -->
-  <Target Name="RunVS14"  DependsOnTargets="BuildVS14;Pack;UnitTestsVS14">
+  <Target Name="RunVS14"  DependsOnTargets="BuildVS14;UnitTestsVS14">
     <Message Text="Running NuGet Build for VS 14" Importance="high" />
   </Target>
 

@@ -132,15 +132,6 @@ if (-not $?)
     exit 1
 }
 
-# Clean
-& $MSBuildExe build\build.proj /t:Clean /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m
-
-if (-not $?)
-{
-    Write-Error "Clean failed!"
-    exit 1
-}
-
 # Restore for VS 14.0
 & $MSBuildExe build\build.proj /t:RestoreVS14 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 

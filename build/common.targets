@@ -39,6 +39,18 @@
     <Import Project="test.targets" />
   </ImportGroup>
 
+  <!-- Allow WPF projects to run under NETCore SDK -->
+  <!-- Errors occur if the output ptah is not set correctly -->
+  <PropertyGroup Condition=" '$(NETCoreWPFProject)' == 'true' ">
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <BaseOutputPath>bin\</BaseOutputPath>
+    <OutputPath>bin\$(VisualStudioVersion)\$(Configuration)</OutputPath>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> 
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
   <!--
     ============================================================
     TestProject
@@ -99,15 +111,18 @@
     ============================================================
   -->
   <Target Name="RunTestsInner">
-
     <PropertyGroup>
       <TestAssemblyPath>$(OutputPath)$(AssemblyName).exe</TestAssemblyPath>
     </PropertyGroup>
 
     <Message Text="Running tests on $(TestAssemblyPath)" Importance="high" />
 
+    <!-- Ensure the test results dir exists -->
+    <MakeDir Directories="$(TestResultsDirectory)"
+      Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
+
     <!-- For desktop frameworks use the console runner -->
-    <Exec Command="$(SolutionPackagesFolder)xunit.runner.console.2.2.0\tools\xunit.console.x86.exe $(TestAssemblyPath)"
+    <Exec Command="$(SolutionPackagesFolder)xunit.runner.console.2.2.0\tools\xunit.console.x86.exe $(TestAssemblyPath) -html $(TestResultsDirectory)$(ProjectName).VS$(VisualStudioVersion).html"
           Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
 
     <!-- For other frameworks call dotnet test -->

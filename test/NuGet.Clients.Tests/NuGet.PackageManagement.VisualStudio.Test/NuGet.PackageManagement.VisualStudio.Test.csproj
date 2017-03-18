@@ -4,11 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <OutputPath>bin\$(configuration)\$(TargetFramework)</OutputPath>
+    <NETCoreWPFProject>true</NETCoreWPFProject>
     <TestProject>true</TestProject>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
 
   <ItemGroup>
