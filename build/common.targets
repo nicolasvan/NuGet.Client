@@ -22,16 +22,9 @@
   </ImportGroup>
 
   <!-- Write out .XML files for projects that will be packed. -->
-  <!-- Avoid writing these out for other scenarios such as tests. -->
-  <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' ">
+  <PropertyGroup Condition=" '$(PackProject)' == 'true' ">
     <GenerateDocumentationFile Condition=" '$(GenerateDocumentationFile)' == '' ">true</GenerateDocumentationFile>
     <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' AND '$(IsNetCoreProject)' != 'true' ">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-    <!--
-    <GenerateDocumentationFile Condition=" '$(IsNetCoreProject)' == 'true' AND '$(TargetFramework)' == ''  ">false</GenerateDocumentationFile>
-    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' ">$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
-    <DocumentationFile Condition=" '$(DocumentationFile)' == '' AND '$(GenerateDocumentationFile)' == 'true' AND '$(IsNetCoreProject)' == 'true' ">$(OutputPath)$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <DocumentationFile Condition=" '$(IsNetCoreProject)' == 'true' AND '$(TargetFramework)' == ''  "></DocumentationFile>
-    -->
   </PropertyGroup>
 
   <!-- These are needed because currently a VSIX project cannot reference a net core project that multi targets -->
@@ -58,54 +51,80 @@
 
   <!--
     ============================================================
-    PackProject hook
-    Packs the current project if it is marked as a pack project.
+    PackProjects
     ============================================================
   -->
-  <!-- Create nupkg hook -->
-  <PropertyGroup Condition=" '$(PackProject)' == 'true' AND '$(PackProjects)' == 'true' AND '$(VisualStudioVersion)' == '15.0' ">
-    <IsInnerBuildForPack Condition=" '$(TargetFrameworks)' != '' AND '$(TargetFramework)' != '' ">true</IsInnerBuildForPack>
-    <EnablePackTarget Condition=" '$(IsInnerBuildForPack)' != 'true' ">true</EnablePackTarget>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(EnablePackTarget)' == 'true' AND '$(CustomPack)' != 'true' ">
-    <IsPackable>true</IsPackable>
-    <IncludeSymbols Condition=" '$(IncludeSymbols)' == '' ">true</IncludeSymbols>
-    <PackageOutputPath>$(NupkgOutputDirectory)</PackageOutputPath>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-  </PropertyGroup>
+  <Target Name="PackProjects" Condition=" '$(PackProject)' == 'true' ">
+    <Message Text="Packing $(ProjectName)" Importance="high" />
 
-  <Target Name="PackProject"
-          AfterTargets="Build;Rebuild"
-          DependsOnTargets="Pack"
-          Condition=" '$(EnablePackTarget)' == 'true' AND '$(CustomPack)' != 'true' ">
-
-    <Message Text="Created nupkg for $(ProjectName)" Importance="high" />
+    <!-- Run pack on the project -->
+    <MSBuild
+      Projects="$(MSBuildProjectFullPath)"
+      Targets="Pack"
+      Properties="Configuration=$(Configuration);
+                  VisualStudioVersion=$(VisualStudioVersion);
+                  PackageOutputPath=$(NupkgOutputDirectory);
+                  NoPackageAnalysis=true;
+                  IncludeSymbols=true;
+                  IsPackable=true;
+                  GenerateDocsForPack=true">
+    </MSBuild>
   </Target>
 
   <!--
     ============================================================
-    RunTests
+    RunTests for the current project
+    Top level entry point for tests
     ============================================================
   -->
   <Target Name="RunTests"
-          AfterTargets="Build;Rebuild"
-          Condition=" '$(SkipTests)' != 'true' AND '$(RunTests)' == 'true' AND '$(TargetFramework)' != '' AND '$(TestProject)' == 'true' ">
+          DependsOnTargets="Build;GetTargetFrameworkSet"
+          Condition=" '$(TestProject)' == 'true' AND '$(SkipTests)' != 'true' ">
+    <Message Text="Running tests for $(ProjectName)" Importance="high" />
     
+    <!-- Execute tests for each framework -->
+    <MSBuild
+      Projects="$(MSBuildProjectFullPath)"
+      Targets="RunTestsInner"
+      Properties="TargetFramework=%(ProjectTargetFrameworkEntries.Identity);
+                  Configuration=$(Configuration);
+                  VisualStudioVersion=$(VisualStudioVersion);">
+    </MSBuild>
+  </Target>
+
+  <!--
+    ============================================================
+    RunTests for the current framework
+    Called by RunTests, this calls XUnit
+    ============================================================
+  -->
+  <Target Name="RunTestsInner">
+
     <PropertyGroup>
       <TestAssemblyPath>$(OutputPath)$(AssemblyName).exe</TestAssemblyPath>
     </PropertyGroup>
 
     <Message Text="Running tests on $(TestAssemblyPath)" Importance="high" />
-    
-    <!-- For desktop frameworks use the msbuild runner -->
-    <xunit Assemblies="$(TestAssemblyPath)"
-           DiagnosticMessages="true"
-           Reporter="verbose"
-           Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
+
+    <!-- For desktop frameworks use the console runner -->
+    <Exec Command="$(SolutionPackagesFolder)xunit.runner.console.2.2.0\tools\xunit.console.x86.exe $(TestAssemblyPath)"
+          Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
 
     <!-- For other frameworks call dotnet test -->
-    <Exec Command="$(DotnetExePath) test -f $(TargetFramework) --no-build -c $(Configuration)" Condition=" '$(IsDesktop)' != 'true' AND '$(SkipCoreTests)' != 'true' " />
+    <Exec Command="$(DotnetExePath) test -f $(TargetFramework) --no-build -c $(Configuration)"
+          Condition=" '$(IsDesktop)' != 'true' AND '$(SkipCoreTests)' != 'true' " />
+  </Target>
+
+  <!--
+    ============================================================
+    GetTargetFrameworkSet get all target frameworks
+    ============================================================
+  -->
+  <Target Name="GetTargetFrameworkSet" Returns="@(ProjectTargetFrameworkEntries)">
+    <!-- Find all frameworks to run on -->
+    <ItemGroup>
+      <ProjectTargetFrameworkEntries Include="$(TargetFramework);$(TargetFrameworks)" />
+    </ItemGroup>
   </Target>
 
 </Project>

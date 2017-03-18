@@ -14,9 +14,11 @@
   <!-- Find all test projects  -->
   <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
     <CoreUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\*\*.csproj" />
-    <CoreFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.FuncTests\*\*.csproj" />
-    <ClientUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.Tests\*\*.csproj" />
-    <ClientFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.FuncTests\*\*.csproj" />
+    <VSUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.Tests\*\*.csproj"
+                        Exclude="$(RepositoryRootDirectory)test\NuGet.Clients.Tests\NuGet.CommandLine.Test\*.csproj" />
+    <CoreFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.FuncTests\*\*.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Clients.Tests\NuGet.CommandLine.Test\*.csproj" />
+    <VSFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Clients.FuncTests\*\*.csproj" />
   </ItemGroup>
 
   <!-- start with only nuget.versioning for xplat -->
@@ -29,37 +31,166 @@
                                    $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Indexing.Test\*.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AllTestProjects Include="@(CoreUnitTestProjects)" Condition=" '$(SkipCoreUnitTests)' != 'true' " />
-    <AllTestProjects Include="@(CoreFuncTestProjects)" Condition=" '$(SkipCoreFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
-    <AllTestProjects Include="@(ClientUnitTestProjects)" Condition=" '$(SkipClientUnitTests)' != 'true' AND '$(FastTests)' != 'true' " />
-    <AllTestProjects Include="@(ClientFuncTestProjects)" Condition=" '$(SkipClientFuncTests)' != 'true' AND '$(FastTests)' != 'true' " />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
-    <SolutionProject Include="$(RepositoryRootDirectory)test\*\*\*.csproj" Exclude="$(RepositoryRootDirectory)test\EndToEnd\*\*.csproj" />
-    <SolutionProject Include="$(RepositoryRootDirectory)src\*\*\*.csproj" />
+    <SolutionProjects Include="$(RepositoryRootDirectory)test\*\*\*.csproj" Exclude="$(RepositoryRootDirectory)test\EndToEnd\*\*.csproj" />
+    <SolutionProjects Include="$(RepositoryRootDirectory)src\*\*\*.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(IsXPlat)' == 'true' ">
-    <SolutionProject Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Versioning.Test\*.csproj" />
+    <SolutionProjects Include="@(CoreUnitTestProjects)" />
   </ItemGroup>
 
   <!--
     ============================================================
-    Test all projects in the solution.
+    Run core functional tests (non-VS specific)
     ============================================================
   -->
-  <Target Name="Test" Condition=" '$(SkipTest)' != 'true' ">
-    <Message Text="$(AllTestProjects)" Importance="high" />
-    
+  <Target Name="CoreFuncTests" DependsOnTargets="BuildVS15;Pack">
+    <Message Text="Running Core Func tests" Importance="high" />
+
     <MSBuild BuildInParallel="false"
-             Projects="@(AllTestProjects)"
+             Projects="@(CoreFuncTestProjects)"
+             Targets="RunTests"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Run functional tests for VS 15
+    ============================================================
+  -->
+  <Target Name="VS15FuncTests" DependsOnTargets="BuildVS15">
+    <Message Text="Running Func tests for VS 15" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(VSFuncTestProjects)"
+             Targets="RunTests"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Run functional tests for VS 14
+    ============================================================
+  -->
+  <Target Name="VS14FuncTests" DependsOnTargets="BuildVS14">
+    <Message Text="Running Func tests for VS 14" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(VSFuncTestProjects)"
+             Targets="RunTests"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=14.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Run core unit tests (non-VS specific)
+    ============================================================
+  -->
+  <Target Name="CoreUnitTests">
+    <Message Text="Running Core Unit tests" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(CoreUnitTestProjects)"
+             Targets="RunTests"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Run VS15 unit tests
+    ============================================================
+  -->
+  <Target Name="UnitTestsVS15">
+    <Message Text="Running VS15 Unit tests" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(VSUnitTestProjects)"
+             Targets="RunTests"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Run VS14 unit tests
+    ============================================================
+  -->
+  <Target Name="UnitTestsVS14">
+    <Message Text="Running VS14 Unit tests" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(VSUnitTestProjects)"
+             Targets="RunTests"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=14.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Build, Pack, Core Tests, Unit tests for VS 15
+    ============================================================
+  -->
+  <Target Name="RunVS15"  DependsOnTargets="BuildVS15;Pack;CoreUnitTests;UnitTestsVS15">
+    <Message Text="Running NuGet Build for VS 15" Importance="high" />
+  </Target>
+
+  <!--
+    ============================================================
+    Build, Pack, Unit tests for VS 14
+    ============================================================
+  -->
+  <Target Name="RunVS14"  DependsOnTargets="BuildVS14;Pack;UnitTestsVS14">
+    <Message Text="Running NuGet Build for VS 14" Importance="high" />
+  </Target>
+
+  <!--
+    ============================================================
+    Build for VS14
+    ============================================================
+  -->
+  <Target Name="BuildVS14">
+    <Message Text="Building for VS14" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(SolutionProjects)"
              Targets="Rebuild"
              Properties="$(CommonMSBuildProperties);
-             RunTests=true;
-             PackProjects=true;
-             VisualStudioVersion=15.0;" />
+                         VisualStudioVersion=14.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Build for VS15
+    ============================================================
+  -->
+  <Target Name="BuildVS15">
+    <Message Text="Building for VS15" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(SolutionProjects)"
+             Targets="Rebuild"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Pack for VS15
+    ============================================================
+  -->
+  <Target Name="Pack" DependsOnTargets="BuildVS15">
+    <Message Text="Packing for VS15" Importance="high" />
+
+    <MSBuild BuildInParallel="false"
+             Projects="@(SolutionProjects)"
+             Targets="PackProjects"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
   </Target>
 
   <!--
@@ -68,21 +199,52 @@
     ============================================================
   -->
   <Target Name="Restore">
+    <Message Text="Restoring for Visual Studio $(VisualStudioVersion)" Importance="high" />
 
     <!-- Convert list of projects to a property -->
     <PropertyGroup>
-      <ProjectListValue>@(SolutionProject)</ProjectListValue>
+      <ProjectListValue>@(SolutionProjects)</ProjectListValue>
     </PropertyGroup>
 
     <MSBuild
       Projects="restorehelper.targets"
       Targets="Restore"
       Properties="RestoreGraphProjectInput=$(ProjectListValue);
-                  %(_MSBuildProjectReferenceExistent.SetConfiguration);
-                  %(_MSBuildProjectReferenceExistent.SetPlatform)"
-      RemoveProperties="%(_MSBuildProjectReferenceExistent.GlobalPropertiesToRemove)">
+                  $(CommonMSBuildProperties);
+                  VisualStudioVersion=$(VisualStudioVersion)">
     </MSBuild>
   </Target>
 
+  <!--
+    ============================================================
+    Restore for VS15
+    ============================================================
+  -->
+  <Target Name="RestoreVS15">
+    <Message Text="Restoring for Visual Studio 15.0" Importance="high" />
+
+    <MSBuild
+      Projects="$(MSBuildThisFileFullPath)"
+      Targets="Restore"
+      Properties="$(CommonMSBuildProperties);
+                  VisualStudioVersion=15.0">
+    </MSBuild>
+  </Target>
+
+  <!--
+    ============================================================
+    Restore for VS14
+    ============================================================
+  -->
+  <Target Name="RestoreVS14">
+    <Message Text="Restoring for Visual Studio 14.0" Importance="high" />
+
+    <MSBuild
+      Projects="$(MSBuildThisFileFullPath)"
+      Targets="Restore"
+      Properties="$(CommonMSBuildProperties);
+                  VisualStudioVersion=14.0">
+    </MSBuild>
+  </Target>
 
 </Project>

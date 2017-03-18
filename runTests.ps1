@@ -123,29 +123,33 @@ Invoke-BuildStep 'Cleaning package cache' {
     } `
     -skip:(-not $CI) `
     -ev +BuildErrors
+	
+# & $MSBuildExe build\build.proj /t:Restore /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber
+
+# & $MSBuildExe build\build.proj /t:Test /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber /p:SkipCoreTests=true /p:SkipCoreFuncTests=true
 
 ## Restoring build.proj for VS15 Tooling for tests
-Invoke-BuildStep 'Restoring build.proj - VS15 Toolset for tests' {
-       Restore-BuildProj `
-           -Configuration $Configuration `
-           -ReleaseLabel $ReleaseLabel `
-           -BuildNumber $BuildNumber `
-           -ToolsetVersion 15
-   } `
-   -skip:$SkipVS15 `
-   -ev +BuildErrors
+# Invoke-BuildStep 'Restoring build.proj - VS15 Toolset for tests' {
+       # Restore-BuildProj `
+           # -Configuration $Configuration `
+           # -ReleaseLabel $ReleaseLabel `
+           # -BuildNumber $BuildNumber `
+           # -ToolsetVersion 15
+   # } `
+   # -skip:$SkipVS15 `
+   # -ev +BuildErrors
    
-## Testing build.proj for VS15 Tooling for tests
-Invoke-BuildStep 'Build and Testing build.proj - VS15 Toolset for tests' {
-       Test-BuildProj `
-           -Configuration $Configuration `
-           -ReleaseLabel $ReleaseLabel `
-           -BuildNumber $BuildNumber `
-           -ToolsetVersion 15 `
-           -Parameters @{ 'SkipCoreTests'=$SkipCoreTests; 'SkipCoreFuncTests'=$SkipCoreFuncTests; 'SkipClientTests'=$SkipClientTests; 'SkipClientFuncTests'=$SkipClientFuncTests} `
-   } `
-   -skip:$SkipVS15 `
-   -ev +BuildErrors
+# ## Testing build.proj for VS15 Tooling for tests
+# Invoke-BuildStep 'Build and Testing build.proj - VS15 Toolset for tests' {
+       # Test-BuildProj `
+           # -Configuration $Configuration `
+           # -ReleaseLabel $ReleaseLabel `
+           # -BuildNumber $BuildNumber `
+           # -ToolsetVersion 15 `
+           # -Parameters @{ 'SkipCoreTests'=$SkipCoreTests; 'SkipCoreFuncTests'=$SkipCoreFuncTests; 'SkipClientTests'=$SkipClientTests; 'SkipClientFuncTests'=$SkipClientFuncTests} `
+   # } `
+   # -skip:$SkipVS15 `
+   # -ev +BuildErrors
 
 # Building the VS15 Tooling solution for tests
 # Invoke-BuildStep 'Building NuGet.sln - VS15 Toolset for tests' {
