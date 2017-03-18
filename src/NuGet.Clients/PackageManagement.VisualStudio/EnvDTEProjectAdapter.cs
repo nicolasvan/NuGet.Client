@@ -398,7 +398,7 @@ namespace NuGet.PackageManagement.VisualStudio
 
         private static string GetMSBuildProperty(IVsBuildPropertyStorage buildPropertyStorage, string name)
         {
-            return GetMSBuildProperty(buildPropertyStorage, name, string.Empty);
+            return GetMSBuildProperty(buildPropertyStorage, name, null);
         }
 
         private static string GetMSBuildProperty(IVsBuildPropertyStorage buildPropertyStorage, string name, string configName)
