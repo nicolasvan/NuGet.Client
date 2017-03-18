@@ -117,14 +117,47 @@ Invoke-BuildStep 'Set delay signing options' {
 # Restore for VS 15.0	
 & $MSBuildExe build\build.proj /t:RestoreVS15 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
+if (-not $?)
+{
+    Write-Error "Restore failed!"
+    exit 1
+}
+
 # Build, Pack, Core unit tests, and Unit tests for VS 15.0	
 & $MSBuildExe build\build.proj /t:RunVS15 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
+
+if (-not $?)
+{
+    Write-Error "VS 15 failed!"
+    exit 1
+}
+
+# Clean
+& $MSBuildExe build\build.proj /t:Clean /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m
+
+if (-not $?)
+{
+    Write-Error "Clean failed!"
+    exit 1
+}
 
 # Restore for VS 14.0
 & $MSBuildExe build\build.proj /t:RestoreVS14 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
+if (-not $?)
+{
+    Write-Error "Restore failed!"
+    exit 1
+}
+
 # Build and Unit tests for VS 14.0
 & $MSBuildExe build\build.proj /t:RunVS14 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
+
+if (-not $?)
+{
+    Write-Error "VS 14 failed!"
+    exit 1
+}
 
 # Building the VS15 Tooling solution
 # Invoke-BuildStep 'Building NuGet.sln - VS15 Toolset' {

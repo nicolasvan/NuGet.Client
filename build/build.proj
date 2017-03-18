@@ -157,8 +157,8 @@
     <Message Text="Building for VS14" Importance="high" />
 
     <MSBuild BuildInParallel="false"
-             Projects="@(SolutionProjects)"
-             Targets="Rebuild"
+             Projects="$(SolutionFile)"
+             Targets="Build"
              Properties="$(CommonMSBuildProperties);
                          VisualStudioVersion=14.0;" />
   </Target>
@@ -172,10 +172,33 @@
     <Message Text="Building for VS15" Importance="high" />
 
     <MSBuild BuildInParallel="false"
-             Projects="@(SolutionProjects)"
-             Targets="Rebuild"
+             Projects="$(SolutionFile)"
+             Targets="Build"
              Properties="$(CommonMSBuildProperties);
                          VisualStudioVersion=15.0;" />
+  </Target>
+
+  <!--
+    ============================================================
+    Clean all
+    ============================================================
+  -->
+  <Target Name="Clean">
+    <Message Text="Cleaning" Importance="high" />
+
+    <!-- Clean 15 -->
+    <MSBuild BuildInParallel="true"
+             Projects="@(SolutionProjects)"
+             Targets="Clean"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=15.0;" />
+
+    <!-- Clean 14 -->
+    <MSBuild BuildInParallel="true"
+             Projects="@(SolutionProjects)"
+             Targets="Clean"
+             Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=14.0;" />
   </Target>
 
   <!--

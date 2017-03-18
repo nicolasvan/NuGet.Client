@@ -124,9 +124,45 @@ Invoke-BuildStep 'Cleaning package cache' {
     -skip:(-not $CI) `
     -ev +BuildErrors
 	
-# & $MSBuildExe build\build.proj /t:Restore /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber
+& $MSBuildExe build\build.proj /t:RestoreVS15 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
-# & $MSBuildExe build\build.proj /t:Test /p:Configuration=$Configuration /v:m /p:ReleaseLabel=$ReleaseLabel /p:VisualStudioVersion=15.0 /p:BuildNumber=$BuildNumber /p:SkipCoreTests=true /p:SkipCoreFuncTests=true
+if (-not $?)
+{
+    Write-Error "Restore failed!"
+    exit 1
+}
+
+& $MSBuildExe build\build.proj /t:CoreFuncTests;VS15FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
+
+if (-not $?)
+{
+    Write-Error "Tests failed!"
+    exit 1
+}
+
+& $MSBuildExe build\build.proj /t:Clean /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m
+
+if (-not $?)
+{
+    Write-Error "Clean failed!"
+    exit 1
+}
+
+& $MSBuildExe build\build.proj /t:RestoreVS14 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
+
+if (-not $?)
+{
+    Write-Error "Restore failed!"
+    exit 1
+}
+
+& $MSBuildExe build\build.proj /t:VS14FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
+
+if (-not $?)
+{
+    Write-Error "Tests failed!"
+    exit 1
+}
 
 ## Restoring build.proj for VS15 Tooling for tests
 # Invoke-BuildStep 'Restoring build.proj - VS15 Toolset for tests' {

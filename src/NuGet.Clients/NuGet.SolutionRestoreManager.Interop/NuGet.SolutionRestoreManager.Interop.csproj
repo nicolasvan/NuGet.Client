@@ -42,13 +42,14 @@
 
   <Import Project="$(BuildCommonDirectory)common.targets" />
 
-  <Target Name="CustomPack" AfterTargets="Build;Rebuild" Condition=" '$(EnablePackTarget)' == 'true' AND '$(CustomPack)' == 'true' ">
+  <!-- Custom pack, called by build.proj -->
+  <Target Name="Pack">
     <ItemGroup>
       <Nuspec Include="*.nuspec" />
       <PackageInclude Include="install.ps1" />
     </ItemGroup>
     <Copy SourceFiles="%(PackageInclude.Identity)" DestinationFolder="$(TargetDir)" />
-    <Exec Command="$(NuGetExePath) pack %(Nuspec.Identity) -Version $(Version) -BasePath $(TargetDir) -OutputDirectory $(NupkgOutputDirectory) -Verbosity detailed" />
+    <Exec Command="$(NuGetExePath) pack %(Nuspec.Identity) -Version $(Version) -BasePath $(TargetDir) -OutputDirectory $(NupkgOutputDirectory) -Verbosity detailed -Symbols" />
   </Target>
   
   <Import Project="$(BuildCommonDirectory)legacy.imports.targets" />
