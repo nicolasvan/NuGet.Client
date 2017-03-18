@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using Microsoft.VisualStudio.Threading;
 using System;
 using System.Threading;
 
@@ -28,5 +29,9 @@ namespace NuGet.PackageManagement.UI
         /// </summary>
         /// <returns>A disposable object that will release the lock on disposed event.</returns>
         IDisposable AcquireLock();
+
+        JoinableTask<T> EnterNuGetOperation<T>(Func<System.Threading.Tasks.Task<T>> execute, CancellationToken token);
+
+        JoinableTask EnterNuGetOperation(Func<System.Threading.Tasks.Task> execute, CancellationToken token);
     }
 }

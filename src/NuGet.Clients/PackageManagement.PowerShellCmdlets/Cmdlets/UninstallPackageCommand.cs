@@ -64,15 +64,23 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
             TelemetryService = new TelemetryServiceHelper();
             TelemetryUtility.StartorResumeTimer();
 
-            using (var lck = _lockService.AcquireLock())
-            {
-                Preprocess();
+            var context1 = SynchronizationContext.Current;
 
-                SubscribeToProgressEvents();
-                Task.Run(UninstallPackageAsync);
-                WaitAndLogPackageActions();
-                UnsubscribeFromProgressEvents();
-            }
+            NuGetUIThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                var context2 = SynchronizationContext.Current;
+
+                await _lockService.EnterNuGetOperation(async () =>
+                {
+                    var context3 = SynchronizationContext.Current;
+                    Preprocess();
+
+                    SubscribeToProgressEvents();
+                    await UninstallPackageAsync();
+                    WaitAndLogPackageActions();
+                    UnsubscribeFromProgressEvents();
+                }, Token);
+            });
 
             TelemetryUtility.StopTimer();
             var actionTelemetryEvent = TelemetryUtility.GetActionTelemetryEvent(
