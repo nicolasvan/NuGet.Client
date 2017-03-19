@@ -16,6 +16,11 @@
     <Compile Include="$(SharedDirectory)\*.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
   </ItemGroup>
 
+  <!-- Include shared files for test netcore projects -->
+  <ItemGroup Condition=" '$(IsNetCoreProject)' == 'true' AND '$(SkipShared)' != 'true' AND '$(TestProject)' == 'true' ">
+    <Compile Include="$(BuildCommonDirectory)TestShared\*.cs" />
+  </ItemGroup>
+
   <!-- Projects that ship -->
   <ImportGroup>
     <Import Project="sign.targets" />
@@ -114,7 +119,6 @@
     <PropertyGroup>
       <TestAssemblyPath>$(OutputPath)$(AssemblyName).exe</TestAssemblyPath>
     </PropertyGroup>
-
     <Message Text="Running tests on $(TestAssemblyPath)" Importance="high" />
 
     <!-- Ensure the test results dir exists -->
@@ -122,12 +126,60 @@
       Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
 
     <!-- For desktop frameworks use the console runner -->
-    <Exec Command="$(SolutionPackagesFolder)xunit.runner.console.2.2.0\tools\xunit.console.x86.exe $(TestAssemblyPath) -html $(TestResultsDirectory)$(ProjectName).VS$(VisualStudioVersion).html"
+    <Exec Command="$(XunitConoleExePath) $(TestAssemblyPath) -html $(TestResultsDirectory)$(ProjectName).VS$(VisualStudioVersion).html"
           Condition=" '$(IsDesktop)' == 'true' AND '$(SkipDesktopTests)' != 'true' " />
 
     <!-- For other frameworks call dotnet test -->
     <Exec Command="$(DotnetExePath) test -f $(TargetFramework) --no-build -c $(Configuration)"
           Condition=" '$(IsDesktop)' != 'true' AND '$(SkipCoreTests)' != 'true' " />
+  </Target>
+
+  <!--
+    ============================================================
+    GetTestAssemblies
+    ============================================================
+  -->
+  <Target Name="GetTestAssemblies"
+          DependsOnTargets="Build;GetTargetFrameworkSet"
+          Condition=" '$(TestProject)' == 'true' AND '$(SkipTests)' != 'true' "
+          Returns="@(TestAssemblyPath)">
+    <Message Text="Discovering test assemblies for $(AssemblyName)" Importance="high" />
+
+    <!-- Execute find for all frameworks -->
+    <MSBuild
+      Projects="$(MSBuildProjectFullPath)"
+      Targets="GetTestAssembliesInner"
+      Properties="TargetFramework=%(ProjectTargetFrameworkEntries.Identity);
+                  Configuration=$(Configuration);
+                  VisualStudioVersion=$(VisualStudioVersion);">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
+  </Target>
+
+  <!--
+    ============================================================
+    GetTestAssembliesInner
+    ============================================================
+  -->
+  <Target Name="GetTestAssembliesInner"
+          Returns="@(TestAssemblyPath)">
+
+    <PropertyGroup>
+      <TestAssemblyRelativePath Condition=" '$(IsDesktop)' == 'true' ">$(OutputPath)$(AssemblyName).exe</TestAssemblyRelativePath>
+      <TestAssemblyRelativePath Condition=" '$(IsDesktop)' != 'true' ">$(OutputPath)$(AssemblyName).dll</TestAssemblyRelativePath>
+    </PropertyGroup>
+
+    <ConvertToAbsolutePath Paths="$(TestAssemblyRelativePath)">
+      <Output TaskParameter="AbsolutePaths" PropertyName="AbsoluteTestAssemblyPath"/>
+    </ConvertToAbsolutePath>
+
+    <ItemGroup>
+      <TestAssemblyPath Include="$(AbsoluteTestAssemblyPath)">
+        <IsDesktop Condition=" '$(IsDesktop)' == 'true' ">true</IsDesktop>
+        <IsCore Condition=" '$(IsDesktop)' != 'true' ">true</IsCore>
+      </TestAssemblyPath>
+    </ItemGroup>
   </Target>
 
   <!--

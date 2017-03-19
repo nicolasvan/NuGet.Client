@@ -48,13 +48,24 @@
     ============================================================
   -->
   <Target Name="CoreFuncTests" DependsOnTargets="BuildVS15;Pack">
-    <Message Text="Running Core Func tests" Importance="high" />
+    <!-- Test inputs -->
+    <PropertyGroup>
+      <TestProjectPaths>@(CoreFuncTestProjects)</TestProjectPaths>
+      <TestResultsFileName>CoreFuncTests</TestResultsFileName>
+      <TestVisualStudioVersion>15.0</TestVisualStudioVersion>
+    </PropertyGroup>
 
-    <MSBuild BuildInParallel="false"
-             Projects="@(CoreFuncTestProjects)"
-             Targets="RunTests"
-             Properties="$(CommonMSBuildProperties);
-                         VisualStudioVersion=15.0;" />
+    <!-- Run tests as a batch -->
+    <MSBuild
+        Projects="$(MSBuildThisFileFullPath)"
+        Targets="RunTestsOnProjects"
+        Properties="$(CommonMSBuildProperties);
+                    VisualStudioVersion=$(TestVisualStudioVersion);
+                    TestResultsFileName=$(TestResultsFileName);
+                    TestProjectPaths=$(TestProjectPaths)">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
   </Target>
 
   <!--
@@ -63,13 +74,24 @@
     ============================================================
   -->
   <Target Name="VS15FuncTests" DependsOnTargets="BuildVS15">
-    <Message Text="Running Func tests for VS 15" Importance="high" />
+    <!-- Test inputs -->
+    <PropertyGroup>
+      <TestProjectPaths>@(VSFuncTestProjects)</TestProjectPaths>
+      <TestResultsFileName>VS15FuncTests</TestResultsFileName>
+      <TestVisualStudioVersion>15.0</TestVisualStudioVersion>
+    </PropertyGroup>
 
-    <MSBuild BuildInParallel="false"
-             Projects="@(VSFuncTestProjects)"
-             Targets="RunTests"
-             Properties="$(CommonMSBuildProperties);
-                         VisualStudioVersion=15.0;" />
+    <!-- Run tests as a batch -->
+    <MSBuild
+        Projects="$(MSBuildThisFileFullPath)"
+        Targets="RunTestsOnProjects"
+        Properties="$(CommonMSBuildProperties);
+                    VisualStudioVersion=$(TestVisualStudioVersion);
+                    TestResultsFileName=$(TestResultsFileName);
+                    TestProjectPaths=$(TestProjectPaths)">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
   </Target>
 
   <!--
@@ -78,13 +100,24 @@
     ============================================================
   -->
   <Target Name="VS14FuncTests" DependsOnTargets="BuildVS14">
-    <Message Text="Running Func tests for VS 14" Importance="high" />
+    <!-- Test inputs -->
+    <PropertyGroup>
+      <TestProjectPaths>@(VSFuncTestProjects)</TestProjectPaths>
+      <TestResultsFileName>VS14FuncTests</TestResultsFileName>
+      <TestVisualStudioVersion>14.0</TestVisualStudioVersion>
+    </PropertyGroup>
 
-    <MSBuild BuildInParallel="false"
-             Projects="@(VSFuncTestProjects)"
-             Targets="RunTests"
-             Properties="$(CommonMSBuildProperties);
-                         VisualStudioVersion=14.0;" />
+    <!-- Run tests as a batch -->
+    <MSBuild
+        Projects="$(MSBuildThisFileFullPath)"
+        Targets="RunTestsOnProjects"
+        Properties="$(CommonMSBuildProperties);
+                    VisualStudioVersion=$(TestVisualStudioVersion);
+                    TestResultsFileName=$(TestResultsFileName);
+                    TestProjectPaths=$(TestProjectPaths)">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
   </Target>
 
   <!--
@@ -93,13 +126,24 @@
     ============================================================
   -->
   <Target Name="CoreUnitTests">
-    <Message Text="Running Core Unit tests" Importance="high" />
+    <!-- Test inputs -->
+    <PropertyGroup>
+      <TestProjectPaths>@(CoreUnitTestProjects)</TestProjectPaths>
+      <TestResultsFileName>CoreUnitTests</TestResultsFileName>
+      <TestVisualStudioVersion>15.0</TestVisualStudioVersion>
+    </PropertyGroup>
 
-    <MSBuild BuildInParallel="false"
-             Projects="@(CoreUnitTestProjects)"
-             Targets="RunTests"
-             Properties="$(CommonMSBuildProperties);
-                         VisualStudioVersion=15.0;" />
+    <!-- Run tests as a batch -->
+    <MSBuild
+        Projects="$(MSBuildThisFileFullPath)"
+        Targets="RunTestsOnProjects"
+        Properties="$(CommonMSBuildProperties);
+                    VisualStudioVersion=$(TestVisualStudioVersion);
+                    TestResultsFileName=$(TestResultsFileName);
+                    TestProjectPaths=$(TestProjectPaths)">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
   </Target>
 
   <!--
@@ -108,13 +152,24 @@
     ============================================================
   -->
   <Target Name="UnitTestsVS15">
-    <Message Text="Running VS15 Unit tests" Importance="high" />
+    <!-- Test inputs -->
+    <PropertyGroup>
+      <TestProjectPaths>@(VSUnitTestProjects)</TestProjectPaths>
+      <TestResultsFileName>UnitTestsVS15</TestResultsFileName>
+      <TestVisualStudioVersion>15.0</TestVisualStudioVersion>
+    </PropertyGroup>
 
-    <MSBuild BuildInParallel="false"
-             Projects="@(VSUnitTestProjects)"
-             Targets="RunTests"
-             Properties="$(CommonMSBuildProperties);
-                         VisualStudioVersion=15.0;" />
+    <!-- Run tests as a batch -->
+    <MSBuild
+        Projects="$(MSBuildThisFileFullPath)"
+        Targets="RunTestsOnProjects"
+        Properties="$(CommonMSBuildProperties);
+                    VisualStudioVersion=$(TestVisualStudioVersion);
+                    TestResultsFileName=$(TestResultsFileName);
+                    TestProjectPaths=$(TestProjectPaths)">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
   </Target>
 
   <!--
@@ -123,13 +178,24 @@
     ============================================================
   -->
   <Target Name="UnitTestsVS14">
-    <Message Text="Running VS14 Unit tests" Importance="high" />
+    <!-- Test inputs -->
+    <PropertyGroup>
+      <TestProjectPaths>@(VSUnitTestProjects)</TestProjectPaths>
+      <TestResultsFileName>UnitTestsVS14</TestResultsFileName>
+      <TestVisualStudioVersion>14.0</TestVisualStudioVersion>
+    </PropertyGroup>
 
-    <MSBuild BuildInParallel="false"
-             Projects="@(VSUnitTestProjects)"
-             Targets="RunTests"
-             Properties="$(CommonMSBuildProperties);
-                         VisualStudioVersion=14.0;" />
+    <!-- Run tests as a batch -->
+    <MSBuild
+        Projects="$(MSBuildThisFileFullPath)"
+        Targets="RunTestsOnProjects"
+        Properties="$(CommonMSBuildProperties);
+                    VisualStudioVersion=$(TestVisualStudioVersion);
+                    TestResultsFileName=$(TestResultsFileName);
+                    TestProjectPaths=$(TestProjectPaths)">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
   </Target>
 
   <!--
@@ -158,8 +224,7 @@
   <Target Name="BuildVS14">
     <Message Text="Building for VS14" Importance="high" />
 
-    <MSBuild BuildInParallel="false"
-             Projects="$(SolutionFile)"
+    <MSBuild Projects="$(SolutionFile)"
              Targets="Build"
              Properties="$(CommonMSBuildProperties);
                          VisualStudioVersion=14.0;" />
@@ -173,8 +238,7 @@
   <Target Name="BuildVS15">
     <Message Text="Building for VS15" Importance="high" />
 
-    <MSBuild BuildInParallel="false"
-             Projects="$(SolutionFile)"
+    <MSBuild Projects="$(SolutionFile)"
              Targets="Build"
              Properties="$(CommonMSBuildProperties);
                          VisualStudioVersion=15.0;" />
@@ -272,4 +336,67 @@
     </MSBuild>
   </Target>
 
+  <!--
+    ============================================================
+    RunTestsOnProjects
+    Finds all test assemblies and allows Xunit to run them as 
+    efficiently as the xunit.runner.json settings allow.
+    ============================================================
+  -->
+  <Target Name="RunTestsOnProjects">
+    <Message Text="Running $(CoreUnitTests)" Importance="high" />
+
+    <ItemGroup>
+      <TestProjectToSearch Include="$(TestProjectPaths)" />
+    </ItemGroup>
+
+    <MSBuild
+            Projects="@(TestProjectToSearch)"
+            Targets="GetTestAssemblies"
+            Properties="$(CommonMSBuildProperties);
+                         VisualStudioVersion=$(VisualStudioVersion);">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="TestAssemblyPath" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <TestResultsDirectory>$(ArtifactsDirectory)TestResults\</TestResultsDirectory>
+    </PropertyGroup>
+
+    <!-- Ensure the test results dir exists -->
+    <MakeDir Directories="$(TestResultsDirectory)" />
+
+    <PropertyGroup>
+      <!-- Sort assemblies -->
+      <DesktopInputTestAssemblies>@(TestAssemblyPath->WithMetadataValue("IsDesktop", "true"))</DesktopInputTestAssemblies>
+      <DesktopInputTestAssembliesSpaced>$(DesktopInputTestAssemblies.Replace(';', ' '))</DesktopInputTestAssembliesSpaced>
+      <CoreInputTestAssemblies>@(TestAssemblyPath->WithMetadataValue("IsCore", "true"))</CoreInputTestAssemblies>
+      <CoreInputTestAssembliesSpaced>$(CoreInputTestAssemblies.Replace(';', ' '))</CoreInputTestAssembliesSpaced>
+      
+      <!-- Build exe commands -->
+      <VSTestCommand>$(DotnetExePath) vstest $(CoreInputTestAssembliesSpaced)</VSTestCommand>
+      <DesktopTestCommand>$(XunitConoleExePath) $(DesktopInputTestAssembliesSpaced)</DesktopTestCommand>
+      <DesktopTestCommand Condition=" '$(TestResultsFileName)' != '' ">$(DesktopTestCommand) -html $(TestResultsDirectory)$(TestResultsFileName).html</DesktopTestCommand>
+    </PropertyGroup>
+
+    <!-- Desktop -->
+    <Exec Command="$(DesktopTestCommand)"
+          ContinueOnError="true"
+          Condition=" '$(DesktopInputTestAssemblies)' != '' AND '$(SkipDesktopTests)' != 'true' ">
+      <Output TaskParameter="ExitCode" PropertyName="DesktopTestErrorCode"/>
+    </Exec>
+
+    <!-- VSTest/NETCore -->
+    <Exec Command="$(VSTestCommand)"
+          ContinueOnError="true"
+          Condition=" '$(CoreInputTestAssemblies)' != '' AND '$(SkipCoreTests)' != 'true' ">
+      <Output TaskParameter="ExitCode" PropertyName="VSTestErrorCode"/>
+    </Exec>
+
+    <Error Text="Desktop $(TestResultsFileName) tests failed!" Condition=" '$(DesktopTestErrorCode)' != '0' " />
+    <Error Text="NETCore $(TestResultsFileName) tests failed!" Condition=" '$(VSTestErrorCode)' != '0' " />
+
+    <Message Text="Desktop $(TestResultsFileName) tests passed!" Condition=" '$(DesktopTestErrorCode)' == '0' " />
+    <Message Text="NETCore $(TestResultsFileName) tests passed!" Condition=" '$(VSTestErrorCode)' == '0' " />
+  </Target>
 </Project>

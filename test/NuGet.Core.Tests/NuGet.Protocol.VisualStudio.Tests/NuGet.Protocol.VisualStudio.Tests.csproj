@@ -4,6 +4,7 @@
   <PropertyGroup>
     <TargetFrameworks Condition=" '$(IsXPlat)' != 'true' ">net46</TargetFrameworks>
     <TestProject>true</TestProject>
+    <UseParallelXunit>true</UseParallelXunit>
   </PropertyGroup>
 
   <ItemGroup>
