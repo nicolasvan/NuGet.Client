@@ -374,9 +374,10 @@
       <CoreInputTestAssembliesSpaced>$(CoreInputTestAssemblies.Replace(';', ' '))</CoreInputTestAssembliesSpaced>
       
       <!-- Build exe commands -->
+      <TestResultsHtml Condition=" '$(TestResultsFileName)' != '' ">$(TestResultsDirectory)$(TestResultsFileName).html</TestResultsHtml>
       <VSTestCommand>$(DotnetExePath) vstest $(CoreInputTestAssembliesSpaced)</VSTestCommand>
       <DesktopTestCommand>$(XunitConoleExePath) $(DesktopInputTestAssembliesSpaced)</DesktopTestCommand>
-      <DesktopTestCommand Condition=" '$(TestResultsFileName)' != '' ">$(DesktopTestCommand) -html $(TestResultsDirectory)$(TestResultsFileName).html</DesktopTestCommand>
+      <DesktopTestCommand Condition=" '$(TestResultsHtml)' != '' ">$(DesktopTestCommand) -html $(TestResultsHtml)</DesktopTestCommand>
     </PropertyGroup>
 
     <!-- Desktop -->
@@ -393,8 +394,8 @@
       <Output TaskParameter="ExitCode" PropertyName="VSTestErrorCode"/>
     </Exec>
 
-    <Error Text="Desktop $(TestResultsFileName) tests failed!" Condition=" '$(DesktopTestErrorCode)' != '0' " />
-    <Error Text="NETCore $(TestResultsFileName) tests failed!" Condition=" '$(VSTestErrorCode)' != '0' " />
+    <Error Text="Desktop $(TestResultsFileName) tests failed! Results: $(TestResultsHtml)" Condition=" '$(DesktopTestErrorCode)' != '0' AND '$(DesktopTestErrorCode)' != '' " />
+    <Error Text="NETCore $(TestResultsFileName) tests failed!" Condition=" '$(VSTestErrorCode)' != '0' AND '$(VSTestErrorCode)' != '' " />
 
     <Message Text="Desktop $(TestResultsFileName) tests passed!" Condition=" '$(DesktopTestErrorCode)' == '0' " />
     <Message Text="NETCore $(TestResultsFileName) tests passed!" Condition=" '$(VSTestErrorCode)' == '0' " />
