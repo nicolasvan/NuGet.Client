@@ -128,8 +128,6 @@ Invoke-BuildStep 'Cleaning package cache' {
     -skip:(-not $CI) `
     -ev +BuildErrors
 
-$testSuccess = $true
-	
 & $MSBuildExe build\build.proj /t:RestoreVS15 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
 if (-not $?)
@@ -143,31 +141,7 @@ if (-not $?)
 if (-not $?)
 {
     Write-Error "CoreFuncTests failed!"
-    $testSuccess = $false
-}
-
-& $MSBuildExe build\build.proj /t:VS15FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
-
-if (-not $?)
-{
-    Write-Error "VS15FuncTests failed!"
-    $testSuccess = $false
-}
-
-& $MSBuildExe build\build.proj /t:RestoreVS14 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
-
-if (-not $?)
-{
-    Write-Error "Restore failed!"
     exit 1
-}
-
-& $MSBuildExe build\build.proj /t:VS14FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
-
-if (-not $?)
-{
-    Write-Error "VS14FuncTests failed!"
-    $testSuccess = $false
 }
 
 # Test result check
