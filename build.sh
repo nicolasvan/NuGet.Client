@@ -62,4 +62,9 @@ fi
 echo "$DOTNET msbuild build/build.proj /t:CoreUnitTests /p:VisualStudioVersion=15.0 /p:Configuration=Release /p:BuildNumber=1 /p:ReleaseLabel=beta"
 $DOTNET msbuild build/build.proj /t:CoreUnitTests /p:VisualStudioVersion=15.0 /p:Configuration=Release /p:BuildNumber=1 /p:ReleaseLabel=beta
 
+if [ $? -ne 0 ]; then
+	echo "Tests failed!!"
+	exit 1
+fi
+
 exit $RESULTCODE
