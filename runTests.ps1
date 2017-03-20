@@ -86,6 +86,10 @@ if (-not $BuildNumber) {
     $BuildNumber = Get-BuildNumber
 }
 
+Invoke-BuildStep 'Installing .NET CLI for tests' {
+        Install-DotnetCLI -Test -Force:$Force
+    } -ev +BuildErrors
+
 Trace-Log "Test suite run #$BuildNumber started at $startTime"
 
 Test-BuildEnvironment -CI:$CI
@@ -123,6 +127,8 @@ Invoke-BuildStep 'Cleaning package cache' {
     } `
     -skip:(-not $CI) `
     -ev +BuildErrors
+
+$testSuccess = $true
 	
 & $MSBuildExe build\build.proj /t:RestoreVS15 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
@@ -132,20 +138,20 @@ if (-not $?)
     exit 1
 }
 
-& $MSBuildExe build\build.proj /t:CoreFuncTests;VS15FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
+& $MSBuildExe build\build.proj /t:CoreFuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
 if (-not $?)
 {
-    Write-Error "Tests failed!"
-    exit 1
+    Write-Error "CoreFuncTests failed!"
+    $testSuccess = $false
 }
 
-& $MSBuildExe build\build.proj /t:Clean /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m
+& $MSBuildExe build\build.proj /t:VS15FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
 if (-not $?)
 {
-    Write-Error "Clean failed!"
-    exit 1
+    Write-Error "VS15FuncTests failed!"
+    $testSuccess = $false
 }
 
 & $MSBuildExe build\build.proj /t:RestoreVS14 /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
@@ -159,6 +165,13 @@ if (-not $?)
 & $MSBuildExe build\build.proj /t:VS14FuncTests /p:Configuration=$Configuration /p:ReleaseLabel=$ReleaseLabel /p:BuildNumber=$BuildNumber /v:m /m:1
 
 if (-not $?)
+{
+    Write-Error "VS14FuncTests failed!"
+    $testSuccess = $false
+}
+
+# Test result check
+if (-not $testSuccess)
 {
     Write-Error "Tests failed!"
     exit 1

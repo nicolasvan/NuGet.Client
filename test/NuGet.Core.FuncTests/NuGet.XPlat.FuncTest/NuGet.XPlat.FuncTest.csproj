@@ -6,6 +6,7 @@
     <TargetFrameworks Condition=" '$(IsXPlat)' == 'true' ">netcoreapp1.0</TargetFrameworks>
     <TestProject>true</TestProject>
     <TestProjectType>functional</TestProjectType>
+    <SkipTests>true</SkipTests>
     <!--<CSharpTargetsPath>$(BaseOutputPath)$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)\</CSharpTargetsPath>-->
   </PropertyGroup>
   <ItemGroup>
